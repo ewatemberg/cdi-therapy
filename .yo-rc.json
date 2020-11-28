@@ -1,0 +1,42 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "frlp.utn.edu.ar",
+      "nativeLanguage": "es"
+    },
+    "jhipsterVersion": "6.10.5",
+    "applicationType": "monolith",
+    "baseName": "cdi",
+    "packageName": "frlp.utn.edu.ar",
+    "packageFolder": "frlp/utn/edu/ar",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MzMwZTIxNTdkNjE4OTEyNTBjN2VlYjhhZmUwNmU2MTYzYzk2ZDg5NTZjZmU4M2ZhYmY5NmJmOWE3MzgyYzA1OWI0MDIxYTEzMDE3YWMyOGM4YmY2Yjg5MmZiZjkzOGI5MGJiMTA3OWEwNjAxYzcyYmNmOTBjNzFkMDQ3YzljYzg=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "react",
+    "clientTheme": "spacelab",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1606564739538,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "es",
+    "languages": ["es"],
+    "blueprints": []
+  }
+}
