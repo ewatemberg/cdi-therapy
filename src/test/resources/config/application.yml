@@ -14,24 +14,47 @@
 # ===================================================================
 
 spring:
+  profiles:
+    # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
+    #active: testcontainers
   application:
     name: cdi
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:cdi;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    name:
+    username:
+    password:
+    hikari:
+      auto-commit: false
   jackson:
     serialization:
       write-durations-as-timestamps: false
+  jpa:
+    database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+    open-in-view: false
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.hbm2ddl.auto: validate
+      hibernate.jdbc.time_zone: UTC
   liquibase:
     contexts: test
-    url: jdbc:h2:mem:cdi;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-  r2dbc:
-    url: r2dbc:h2:mem:///cdi?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: r2dbc
-    password:
   task:
     execution:
       thread-name-prefix: cdi-task-
@@ -74,7 +97,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: ZjRmYjE3OTVmNTY2NmZkNTM4MzAyNDU3MzAzOWRjNWZmYTJlMWVmYmVhNDAxNWVjMmRmNWRlODM4OGFiYTkzMjk5OTRkMThhNTY4MWUzYzU0MzQ3MmVhOTgxODEzNWZkNGFiZTA4MThjNmJiNjQzOWY3OWQxYmNiYzMwNzI2ZGU=
+        base64-secret: MDI5YTg1NmU1NjJkMDA2YTUyMzY3YTVmODJmMGM3YzQzYWFlYTRkOGYzZDJlOTBkNDBkZmVmMjQwOGUwY2NlNzY2ZjYzNGM0MjlmZDQzM2RjN2E3MTMwZTIzNDJiNDA4MzE4MmNkNjk5NjRmZmViMDg3Y2ViMjRjMTBlZDQ3MTc=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
   metrics:
