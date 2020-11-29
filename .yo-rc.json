@@ -21,14 +21,14 @@
     "serviceDiscoveryType": false,
     "buildTool": "maven",
     "enableSwaggerCodegen": false,
-    "jwtSecretKey": "MzMwZTIxNTdkNjE4OTEyNTBjN2VlYjhhZmUwNmU2MTYzYzk2ZDg5NTZjZmU4M2ZhYmY5NmJmOWE3MzgyYzA1OWI0MDIxYTEzMDE3YWMyOGM4YmY2Yjg5MmZiZjkzOGI5MGJiMTA3OWEwNjAxYzcyYmNmOTBjNzFkMDQ3YzljYzg=",
+    "jwtSecretKey": "ZjRmYjE3OTVmNTY2NmZkNTM4MzAyNDU3MzAzOWRjNWZmYTJlMWVmYmVhNDAxNWVjMmRmNWRlODM4OGFiYTkzMjk5OTRkMThhNTY4MWUzYzU0MzQ3MmVhOTgxODEzNWZkNGFiZTA4MThjNmJiNjQzOWY3OWQxYmNiYzMwNzI2ZGU=",
     "embeddableLaunchScript": false,
     "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "react",
     "clientTheme": "spacelab",
     "clientThemeVariant": "primary",
-    "creationTimestamp": 1606564739538,
+    "creationTimestamp": 1606651277363,
     "testFrameworks": [],
     "jhiPrefix": "jhi",
     "entitySuffix": "",
@@ -37,6 +37,7 @@
     "enableTranslation": true,
     "nativeLanguage": "es",
     "languages": ["es"],
-    "blueprints": []
+    "blueprints": [],
+    "reactive": true
   }
 }
