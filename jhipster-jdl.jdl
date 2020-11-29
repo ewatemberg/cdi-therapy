@@ -25,23 +25,19 @@ entity Paciente {
 
 entity SeccionA {
 	descripcion String
-	vocabulario Vocabulario
 	chequeado Boolean
 }
 
 entity SeccionB {
-	usoLenguaje UsoLenguaje
 	valor Integer
 }
 
 entity SeccionC {
 	descripcion String
-	formaVerbal FormaVerbal
 	valor Integer
 }
 
 entity SeccionD {
-	fraseCompleja FraseCompleja
 	valor Integer
 }
 
@@ -89,11 +85,10 @@ enum CategoriaSemantica {
 }
 
 relationship ManyToOne {
-	SeccionA{vocabularioList} to Vocabulario,
-	SeccionB{usoLenguajeList} to UsoLenguaje,
-	SeccionC{formaVerbalList} to FormaVerbal,
-	SeccionD{fraseComplejaList} to FraseCompleja,
-	Paciente{cuestionarioList} to Cuestionario
+	Vocabulario{seccionA} to SeccionA,
+	UsoLenguaje{seccionB} to SeccionB,
+	FormaVerbal{seccionC} to SeccionC,
+	FraseCompleja{seccionD} to SeccionD
 }
 
 relationship OneToMany {
@@ -101,7 +96,7 @@ relationship OneToMany {
 	Cuestionario to SeccionB{cuestionario},
 	Cuestionario to SeccionC{cuestionario},
 	Cuestionario to SeccionD{cuestionario},
-	Cuestionario to Paciente{cuestionario}
+	Paciente to Cuestionario{paciente}
 }
 
 // Set pagination options
