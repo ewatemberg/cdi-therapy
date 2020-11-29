@@ -1,0 +1,116 @@
+entity Paciente {
+    nombres String,
+    apellidos String,
+    obraSocial String
+	dni String
+	fechaNacimiento LocalDate
+	lugarNacimiento String
+	genero String
+	nacioAntes9Meses Boolean
+	semanasGestacion Integer
+	pesoAlNacer BigDecimal
+	enfermedadAuditivaLenguaje Boolean
+	descripcionProblemaAuditivoLenguaje String
+	infeccionesOido Boolean
+	totalInfeccionesAnual Integer
+	problemaSalud Boolean
+	descripcionProblemaSalud String
+	nombreMadre String
+	edadMadre Integer
+	lugarOrigenMadre String
+	nombrePadre String
+	edadPadre Integer
+	lugarOrigenPadre String	
+}
+
+entity SeccionA {
+	descripcion String
+	vocabulario Vocabulario
+	chequeado Boolean
+}
+
+entity SeccionB {
+	usoLenguaje UsoLenguaje
+	valor Integer
+}
+
+entity SeccionC {
+	descripcion String
+	formaVerbal FormaVerbal
+	valor Integer
+}
+
+entity SeccionD {
+	fraseCompleja FraseCompleja
+	valor Integer
+}
+
+entity Vocabulario {
+	palabra String
+	categoria CategoriaSemantica
+}
+
+entity UsoLenguaje {
+	pregunta String	
+}
+
+entity FormaVerbal {
+	forma String
+}
+
+entity FraseCompleja {
+	frase String
+}
+
+entity Cuestionario {
+}
+
+enum CategoriaSemantica {
+	SONIDOS,
+	ANIMAL,
+	VEHICULOS,
+	ALIMENTACION,
+	ROPA,
+	CUERPO,
+	JUGUETES,
+	COCINA,
+	MUEBLE_CUARTO,
+	LUGAR_OBJETO,
+	PERSONAS,
+	RUTINAS_JUEGOS,
+	ACCIONES_PROCESOS,
+	TIEMPO,
+	CUALIDADES_ATRIBUTOS,
+	PRONOMBRES,
+	PREGUNTAS,
+	PREPOSICIONES_ARTICULOS,
+	CUALIFICADORES_ADVERBIOS,
+	LOCATIVOS
+}
+
+relationship ManyToOne {
+	SeccionA{vocabularioList} to Vocabulario,
+	SeccionB{usoLenguajeList} to UsoLenguaje,
+	SeccionC{formaVerbalList} to FormaVerbal,
+	SeccionD{fraseComplejaList} to FraseCompleja,
+	Paciente{cuestionarioList} to Cuestionario
+}
+
+relationship OneToMany {
+	Cuestionario to SeccionA{cuestionario},
+	Cuestionario to SeccionB{cuestionario},
+	Cuestionario to SeccionC{cuestionario},
+	Cuestionario to SeccionD{cuestionario},
+	Cuestionario to Paciente{cuestionario}
+}
+
+// Set pagination options
+paginate SeccionA with pagination
+paginate SeccionB with pagination
+paginate SeccionC with pagination
+paginate SeccionD with pagination
+paginate Paciente with pagination
+paginate Cuestionario with pagination
+
+// Set service options to all except few
+service all with serviceImpl
