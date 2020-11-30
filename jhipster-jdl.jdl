@@ -20,7 +20,7 @@ entity Paciente {
 	lugarOrigenMadre String
 	nombrePadre String
 	edadPadre Integer
-	lugarOrigenPadre String	
+	lugarOrigenPadre String
 }
 
 entity SeccionA {
@@ -47,7 +47,7 @@ entity Vocabulario {
 }
 
 entity UsoLenguaje {
-	pregunta String	
+	pregunta String
 }
 
 entity FormaVerbal {
@@ -84,18 +84,15 @@ enum CategoriaSemantica {
 	LOCATIVOS
 }
 
-relationship ManyToOne {
-	Vocabulario{seccionA} to SeccionA,
-	UsoLenguaje{seccionB} to SeccionB,
-	FormaVerbal{seccionC} to SeccionC,
-	FraseCompleja{seccionD} to SeccionD
-}
-
 relationship OneToMany {
 	Cuestionario to SeccionA{cuestionario},
 	Cuestionario to SeccionB{cuestionario},
 	Cuestionario to SeccionC{cuestionario},
 	Cuestionario to SeccionD{cuestionario},
+	SeccionA to Vocabulario{seccionA},
+	SeccionB to UsoLenguaje{seccionB},
+	SeccionC to FormaVerbal{seccionC},
+	SeccionD to FraseCompleja{SeccionD},
 	Paciente to Cuestionario{paciente}
 }
 

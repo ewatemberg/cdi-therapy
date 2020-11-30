@@ -7,6 +7,16 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
+        "paciente": "Paciente",
+        "seccionA": "Seccion A",
+        "seccionB": "Seccion B",
+        "seccionC": "Seccion C",
+        "seccionD": "Seccion D",
+        "vocabulario": "Vocabulario",
+        "usoLenguaje": "Uso Lenguaje",
+        "formaVerbal": "Forma Verbal",
+        "fraseCompleja": "Frase Compleja",
+        "cuestionario": "Cuestionario",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

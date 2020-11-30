@@ -1,0 +1,23 @@
+{
+  "cdiApp": {
+    "fraseCompleja": {
+      "home": {
+        "title": "Frase Complejas",
+        "createLabel": "Crear nuevo Frase Compleja",
+        "createOrEditLabel": "Crear o editar Frase Compleja",
+        "notFound": "Ningún Frase Complejas encontrado"
+      },
+      "created": "Un nuevo Frase Compleja ha sido creado con el identificador {{ param }}",
+      "updated": "Un Frase Compleja ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Frase Compleja ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Frase Compleja {{ id }}?"
+      },
+      "detail": {
+        "title": "Frase Compleja"
+      },
+      "frase": "Frase",
+      "seccionD": "Seccion D"
+    }
+  }
+}

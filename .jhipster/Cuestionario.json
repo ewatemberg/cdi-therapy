@@ -1,0 +1,48 @@
+{
+  "name": "Cuestionario",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "seccionA",
+      "otherEntityRelationshipName": "cuestionario",
+      "relationshipName": "seccionA"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "seccionB",
+      "otherEntityRelationshipName": "cuestionario",
+      "relationshipName": "seccionB"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "seccionC",
+      "otherEntityRelationshipName": "cuestionario",
+      "relationshipName": "seccionC"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "seccionD",
+      "otherEntityRelationshipName": "cuestionario",
+      "relationshipName": "seccionD"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "paciente",
+      "otherEntityRelationshipName": "cuestionario",
+      "relationshipName": "paciente",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201130122246",
+  "entityTableName": "cuestionario",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

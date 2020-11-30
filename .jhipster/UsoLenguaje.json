@@ -1,0 +1,29 @@
+{
+  "name": "UsoLenguaje",
+  "fields": [
+    {
+      "fieldName": "pregunta",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "seccionB",
+      "otherEntityRelationshipName": "usoLenguaje",
+      "relationshipName": "seccionB",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201130121946",
+  "entityTableName": "uso_lenguaje",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

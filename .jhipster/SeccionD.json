@@ -1,0 +1,35 @@
+{
+  "name": "SeccionD",
+  "fields": [
+    {
+      "fieldName": "valor",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "fraseCompleja",
+      "otherEntityRelationshipName": "seccionD",
+      "relationshipName": "fraseCompleja"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cuestionario",
+      "otherEntityRelationshipName": "seccionD",
+      "relationshipName": "cuestionario",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201130121746",
+  "entityTableName": "seccion_d",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

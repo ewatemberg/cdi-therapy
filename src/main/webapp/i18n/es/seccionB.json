@@ -1,0 +1,24 @@
+{
+  "cdiApp": {
+    "seccionB": {
+      "home": {
+        "title": "Seccion BS",
+        "createLabel": "Crear nuevo Seccion B",
+        "createOrEditLabel": "Crear o editar Seccion B",
+        "notFound": "Ningún Seccion BS encontrado"
+      },
+      "created": "Un nuevo Seccion B ha sido creado con el identificador {{ param }}",
+      "updated": "Un Seccion B ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Seccion B ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Seccion B {{ id }}?"
+      },
+      "detail": {
+        "title": "Seccion B"
+      },
+      "valor": "Valor",
+      "usoLenguaje": "Uso Lenguaje",
+      "cuestionario": "Cuestionario"
+    }
+  }
+}

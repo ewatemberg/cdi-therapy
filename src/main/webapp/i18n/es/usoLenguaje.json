@@ -1,0 +1,23 @@
+{
+  "cdiApp": {
+    "usoLenguaje": {
+      "home": {
+        "title": "Uso Lenguajes",
+        "createLabel": "Crear nuevo Uso Lenguaje",
+        "createOrEditLabel": "Crear o editar Uso Lenguaje",
+        "notFound": "Ningún Uso Lenguajes encontrado"
+      },
+      "created": "Un nuevo Uso Lenguaje ha sido creado con el identificador {{ param }}",
+      "updated": "Un Uso Lenguaje ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Uso Lenguaje ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Uso Lenguaje {{ id }}?"
+      },
+      "detail": {
+        "title": "Uso Lenguaje"
+      },
+      "pregunta": "Pregunta",
+      "seccionB": "Seccion B"
+    }
+  }
+}

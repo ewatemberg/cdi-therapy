@@ -14,7 +14,26 @@
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121346_added_entity_Paciente.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121446_added_entity_SeccionA.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121546_added_entity_SeccionB.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121646_added_entity_SeccionC.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121746_added_entity_SeccionD.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121846_added_entity_Vocabulario.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121946_added_entity_UsoLenguaje.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130122046_added_entity_FormaVerbal.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130122146_added_entity_FraseCompleja.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130122246_added_entity_Cuestionario.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20201130121446_added_entity_constraints_SeccionA.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121546_added_entity_constraints_SeccionB.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121646_added_entity_constraints_SeccionC.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121746_added_entity_constraints_SeccionD.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121846_added_entity_constraints_Vocabulario.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130121946_added_entity_constraints_UsoLenguaje.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130122046_added_entity_constraints_FormaVerbal.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130122146_added_entity_constraints_FraseCompleja.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201130122246_added_entity_constraints_Cuestionario.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

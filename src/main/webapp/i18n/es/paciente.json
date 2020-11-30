@@ -1,0 +1,44 @@
+{
+  "cdiApp": {
+    "paciente": {
+      "home": {
+        "title": "Pacientes",
+        "createLabel": "Crear nuevo Paciente",
+        "createOrEditLabel": "Crear o editar Paciente",
+        "notFound": "Ningún Pacientes encontrado"
+      },
+      "created": "Un nuevo Paciente ha sido creado con el identificador {{ param }}",
+      "updated": "Un Paciente ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Paciente ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Paciente {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente"
+      },
+      "nombres": "Nombres",
+      "apellidos": "Apellidos",
+      "obraSocial": "Obra Social",
+      "dni": "Dni",
+      "fechaNacimiento": "Fecha Nacimiento",
+      "lugarNacimiento": "Lugar Nacimiento",
+      "genero": "Genero",
+      "nacioAntes9Meses": "Nacio Antes 9 Meses",
+      "semanasGestacion": "Semanas Gestacion",
+      "pesoAlNacer": "Peso Al Nacer",
+      "enfermedadAuditivaLenguaje": "Enfermedad Auditiva Lenguaje",
+      "descripcionProblemaAuditivoLenguaje": "Descripcion Problema Auditivo Lenguaje",
+      "infeccionesOido": "Infecciones Oido",
+      "totalInfeccionesAnual": "Total Infecciones Anual",
+      "problemaSalud": "Problema Salud",
+      "descripcionProblemaSalud": "Descripcion Problema Salud",
+      "nombreMadre": "Nombre Madre",
+      "edadMadre": "Edad Madre",
+      "lugarOrigenMadre": "Lugar Origen Madre",
+      "nombrePadre": "Nombre Padre",
+      "edadPadre": "Edad Padre",
+      "lugarOrigenPadre": "Lugar Origen Padre",
+      "cuestionario": "Cuestionario"
+    }
+  }
+}

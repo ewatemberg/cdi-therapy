@@ -1,0 +1,39 @@
+{
+  "name": "SeccionC",
+  "fields": [
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "valor",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "formaVerbal",
+      "otherEntityRelationshipName": "seccionC",
+      "relationshipName": "formaVerbal"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cuestionario",
+      "otherEntityRelationshipName": "seccionC",
+      "relationshipName": "cuestionario",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201130121646",
+  "entityTableName": "seccion_c",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
