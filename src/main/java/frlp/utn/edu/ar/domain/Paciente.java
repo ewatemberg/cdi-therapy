@@ -88,6 +88,9 @@ public class Paciente implements Serializable {
     @Column(name = "lugar_origen_padre")
     private String lugarOrigenPadre;
 
+    @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL)
+    private User user;
+
     @OneToMany(mappedBy = "paciente")
     private Set<Cuestionario> cuestionarios = new HashSet<>();
 
@@ -428,6 +431,13 @@ public class Paciente implements Serializable {
         return 31;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     // prettier-ignore
     @Override
     public String toString() {
