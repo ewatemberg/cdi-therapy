@@ -1,10 +1,10 @@
 package frlp.utn.edu.ar.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 
 /**
  * A FraseCompleja.
@@ -22,9 +22,9 @@ public class FraseCompleja implements Serializable {
     @Column(name = "frase")
     private String frase;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "fraseComplejas", allowSetters = true)
-    private SeccionD seccionD;
+    @OneToMany(mappedBy = "fraseCompleja")
+    @JsonIgnoreProperties(value = { "cuestionario", "fraseCompleja" }, allowSetters = true)
+    private Set<SeccionD> seccionDS = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -35,8 +35,13 @@ public class FraseCompleja implements Serializable {
         this.id = id;
     }
 
+    public FraseCompleja id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getFrase() {
-        return frase;
+        return this.frase;
     }
 
     public FraseCompleja frase(String frase) {
@@ -48,18 +53,37 @@ public class FraseCompleja implements Serializable {
         this.frase = frase;
     }
 
-    public SeccionD getSeccionD() {
-        return seccionD;
+    public Set<SeccionD> getSeccionDS() {
+        return this.seccionDS;
     }
 
-    public FraseCompleja seccionD(SeccionD seccionD) {
-        this.seccionD = seccionD;
+    public FraseCompleja seccionDS(Set<SeccionD> seccionDS) {
+        this.setSeccionDS(seccionDS);
         return this;
     }
 
-    public void setSeccionD(SeccionD seccionD) {
-        this.seccionD = seccionD;
+    public FraseCompleja addSeccionD(SeccionD seccionD) {
+        this.seccionDS.add(seccionD);
+        seccionD.setFraseCompleja(this);
+        return this;
     }
+
+    public FraseCompleja removeSeccionD(SeccionD seccionD) {
+        this.seccionDS.remove(seccionD);
+        seccionD.setFraseCompleja(null);
+        return this;
+    }
+
+    public void setSeccionDS(Set<SeccionD> seccionDS) {
+        if (this.seccionDS != null) {
+            this.seccionDS.forEach(i -> i.setFraseCompleja(null));
+        }
+        if (seccionDS != null) {
+            seccionDS.forEach(i -> i.setFraseCompleja(this));
+        }
+        this.seccionDS = seccionDS;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -75,7 +99,8 @@ public class FraseCompleja implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

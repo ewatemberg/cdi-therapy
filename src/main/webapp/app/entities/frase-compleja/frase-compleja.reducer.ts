@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
   FETCH_FRASECOMPLEJA: 'fraseCompleja/FETCH_FRASECOMPLEJA',
   CREATE_FRASECOMPLEJA: 'fraseCompleja/CREATE_FRASECOMPLEJA',
   UPDATE_FRASECOMPLEJA: 'fraseCompleja/UPDATE_FRASECOMPLEJA',
+  PARTIAL_UPDATE_FRASECOMPLEJA: 'fraseCompleja/PARTIAL_UPDATE_FRASECOMPLEJA',
   DELETE_FRASECOMPLEJA: 'fraseCompleja/DELETE_FRASECOMPLEJA',
   RESET: 'fraseCompleja/RESET',
 };
@@ -41,6 +42,7 @@ export default (state: FraseComplejaState = initialState, action): FraseCompleja
     case REQUEST(ACTION_TYPES.CREATE_FRASECOMPLEJA):
     case REQUEST(ACTION_TYPES.UPDATE_FRASECOMPLEJA):
     case REQUEST(ACTION_TYPES.DELETE_FRASECOMPLEJA):
+    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_FRASECOMPLEJA):
       return {
         ...state,
         errorMessage: null,
@@ -51,6 +53,7 @@ export default (state: FraseComplejaState = initialState, action): FraseCompleja
     case FAILURE(ACTION_TYPES.FETCH_FRASECOMPLEJA):
     case FAILURE(ACTION_TYPES.CREATE_FRASECOMPLEJA):
     case FAILURE(ACTION_TYPES.UPDATE_FRASECOMPLEJA):
+    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_FRASECOMPLEJA):
     case FAILURE(ACTION_TYPES.DELETE_FRASECOMPLEJA):
       return {
         ...state,
@@ -73,6 +76,7 @@ export default (state: FraseComplejaState = initialState, action): FraseCompleja
       };
     case SUCCESS(ACTION_TYPES.CREATE_FRASECOMPLEJA):
     case SUCCESS(ACTION_TYPES.UPDATE_FRASECOMPLEJA):
+    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_FRASECOMPLEJA):
       return {
         ...state,
         updating: false,
@@ -124,7 +128,15 @@ export const createEntity: ICrudPutAction<IFraseCompleja> = entity => async disp
 export const updateEntity: ICrudPutAction<IFraseCompleja> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_FRASECOMPLEJA,
-    payload: axios.put(apiUrl, cleanEntity(entity)),
+    payload: axios.put(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
+  });
+  return result;
+};
+
+export const partialUpdate: ICrudPutAction<IFraseCompleja> = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.PARTIAL_UPDATE_FRASECOMPLEJA,
+    payload: axios.patch(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
   });
   return result;
 };

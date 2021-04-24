@@ -1,21 +1,21 @@
 package frlp.utn.edu.ar.web.rest;
 
 import frlp.utn.edu.ar.domain.FraseCompleja;
+import frlp.utn.edu.ar.repository.FraseComplejaRepository;
 import frlp.utn.edu.ar.service.FraseComplejaService;
 import frlp.utn.edu.ar.web.rest.errors.BadRequestAlertException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link frlp.utn.edu.ar.domain.FraseCompleja}.
@@ -33,8 +33,11 @@ public class FraseComplejaResource {
 
     private final FraseComplejaService fraseComplejaService;
 
-    public FraseComplejaResource(FraseComplejaService fraseComplejaService) {
+    private final FraseComplejaRepository fraseComplejaRepository;
+
+    public FraseComplejaResource(FraseComplejaService fraseComplejaService, FraseComplejaRepository fraseComplejaRepository) {
         this.fraseComplejaService = fraseComplejaService;
+        this.fraseComplejaRepository = fraseComplejaRepository;
     }
 
     /**
@@ -51,30 +54,80 @@ public class FraseComplejaResource {
             throw new BadRequestAlertException("A new fraseCompleja cannot already have an ID", ENTITY_NAME, "idexists");
         }
         FraseCompleja result = fraseComplejaService.save(fraseCompleja);
-        return ResponseEntity.created(new URI("/api/frase-complejas/" + result.getId()))
+        return ResponseEntity
+            .created(new URI("/api/frase-complejas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /frase-complejas} : Updates an existing fraseCompleja.
+     * {@code PUT  /frase-complejas/:id} : Updates an existing fraseCompleja.
      *
+     * @param id the id of the fraseCompleja to save.
      * @param fraseCompleja the fraseCompleja to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated fraseCompleja,
      * or with status {@code 400 (Bad Request)} if the fraseCompleja is not valid,
      * or with status {@code 500 (Internal Server Error)} if the fraseCompleja couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/frase-complejas")
-    public ResponseEntity<FraseCompleja> updateFraseCompleja(@RequestBody FraseCompleja fraseCompleja) throws URISyntaxException {
-        log.debug("REST request to update FraseCompleja : {}", fraseCompleja);
+    @PutMapping("/frase-complejas/{id}")
+    public ResponseEntity<FraseCompleja> updateFraseCompleja(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody FraseCompleja fraseCompleja
+    ) throws URISyntaxException {
+        log.debug("REST request to update FraseCompleja : {}, {}", id, fraseCompleja);
         if (fraseCompleja.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!Objects.equals(id, fraseCompleja.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!fraseComplejaRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         FraseCompleja result = fraseComplejaService.save(fraseCompleja);
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, fraseCompleja.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code PATCH  /frase-complejas/:id} : Partial updates given fields of an existing fraseCompleja, field will ignore if it is null
+     *
+     * @param id the id of the fraseCompleja to save.
+     * @param fraseCompleja the fraseCompleja to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated fraseCompleja,
+     * or with status {@code 400 (Bad Request)} if the fraseCompleja is not valid,
+     * or with status {@code 404 (Not Found)} if the fraseCompleja is not found,
+     * or with status {@code 500 (Internal Server Error)} if the fraseCompleja couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/frase-complejas/{id}", consumes = "application/merge-patch+json")
+    public ResponseEntity<FraseCompleja> partialUpdateFraseCompleja(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody FraseCompleja fraseCompleja
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update FraseCompleja partially : {}, {}", id, fraseCompleja);
+        if (fraseCompleja.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, fraseCompleja.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!fraseComplejaRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<FraseCompleja> result = fraseComplejaService.partialUpdate(fraseCompleja);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, fraseCompleja.getId().toString())
+        );
     }
 
     /**
@@ -111,6 +164,9 @@ public class FraseComplejaResource {
     public ResponseEntity<Void> deleteFraseCompleja(@PathVariable Long id) {
         log.debug("REST request to delete FraseCompleja : {}", id);
         fraseComplejaService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

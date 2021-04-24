@@ -1,13 +1,14 @@
 package frlp.utn.edu.ar.domain;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import frlp.utn.edu.ar.web.rest.TestUtil;
 
-public class VocabularioTest {
+import frlp.utn.edu.ar.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
+
+class VocabularioTest {
 
     @Test
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Vocabulario.class);
         Vocabulario vocabulario1 = new Vocabulario();
         vocabulario1.setId(1L);

@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
   FETCH_FORMAVERBAL: 'formaVerbal/FETCH_FORMAVERBAL',
   CREATE_FORMAVERBAL: 'formaVerbal/CREATE_FORMAVERBAL',
   UPDATE_FORMAVERBAL: 'formaVerbal/UPDATE_FORMAVERBAL',
+  PARTIAL_UPDATE_FORMAVERBAL: 'formaVerbal/PARTIAL_UPDATE_FORMAVERBAL',
   DELETE_FORMAVERBAL: 'formaVerbal/DELETE_FORMAVERBAL',
   RESET: 'formaVerbal/RESET',
 };
@@ -41,6 +42,7 @@ export default (state: FormaVerbalState = initialState, action): FormaVerbalStat
     case REQUEST(ACTION_TYPES.CREATE_FORMAVERBAL):
     case REQUEST(ACTION_TYPES.UPDATE_FORMAVERBAL):
     case REQUEST(ACTION_TYPES.DELETE_FORMAVERBAL):
+    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_FORMAVERBAL):
       return {
         ...state,
         errorMessage: null,
@@ -51,6 +53,7 @@ export default (state: FormaVerbalState = initialState, action): FormaVerbalStat
     case FAILURE(ACTION_TYPES.FETCH_FORMAVERBAL):
     case FAILURE(ACTION_TYPES.CREATE_FORMAVERBAL):
     case FAILURE(ACTION_TYPES.UPDATE_FORMAVERBAL):
+    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_FORMAVERBAL):
     case FAILURE(ACTION_TYPES.DELETE_FORMAVERBAL):
       return {
         ...state,
@@ -73,6 +76,7 @@ export default (state: FormaVerbalState = initialState, action): FormaVerbalStat
       };
     case SUCCESS(ACTION_TYPES.CREATE_FORMAVERBAL):
     case SUCCESS(ACTION_TYPES.UPDATE_FORMAVERBAL):
+    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_FORMAVERBAL):
       return {
         ...state,
         updating: false,
@@ -124,7 +128,15 @@ export const createEntity: ICrudPutAction<IFormaVerbal> = entity => async dispat
 export const updateEntity: ICrudPutAction<IFormaVerbal> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_FORMAVERBAL,
-    payload: axios.put(apiUrl, cleanEntity(entity)),
+    payload: axios.put(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
+  });
+  return result;
+};
+
+export const partialUpdate: ICrudPutAction<IFormaVerbal> = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.PARTIAL_UPDATE_FORMAVERBAL,
+    payload: axios.patch(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
   });
   return result;
 };

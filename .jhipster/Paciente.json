@@ -98,7 +98,6 @@
       "relationshipName": "cuestionario"
     }
   ],
-  "changelogDate": "20201130121346",
   "entityTableName": "paciente",
   "dto": "no",
   "pagination": "pagination",
@@ -107,6 +106,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "changelogDate": "20210424221815"
 }

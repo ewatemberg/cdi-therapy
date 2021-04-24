@@ -1,13 +1,14 @@
 package frlp.utn.edu.ar.domain;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import frlp.utn.edu.ar.web.rest.TestUtil;
 
-public class UsoLenguajeTest {
+import frlp.utn.edu.ar.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
+
+class UsoLenguajeTest {
 
     @Test
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(UsoLenguaje.class);
         UsoLenguaje usoLenguaje1 = new UsoLenguaje();
         usoLenguaje1.setId(1L);

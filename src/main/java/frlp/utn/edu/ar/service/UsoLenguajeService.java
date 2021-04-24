@@ -1,7 +1,6 @@
 package frlp.utn.edu.ar.service;
 
 import frlp.utn.edu.ar.domain.UsoLenguaje;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import java.util.Optional;
  * Service Interface for managing {@link UsoLenguaje}.
  */
 public interface UsoLenguajeService {
-
     /**
      * Save a usoLenguaje.
      *
@@ -19,12 +17,19 @@ public interface UsoLenguajeService {
     UsoLenguaje save(UsoLenguaje usoLenguaje);
 
     /**
+     * Partially updates a usoLenguaje.
+     *
+     * @param usoLenguaje the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<UsoLenguaje> partialUpdate(UsoLenguaje usoLenguaje);
+
+    /**
      * Get all the usoLenguajes.
      *
      * @return the list of entities.
      */
     List<UsoLenguaje> findAll();
-
 
     /**
      * Get the "id" usoLenguaje.

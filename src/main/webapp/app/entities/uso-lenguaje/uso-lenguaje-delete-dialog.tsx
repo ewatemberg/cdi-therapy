@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IUsoLenguaje } from 'app/shared/model/uso-lenguaje.model';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity, deleteEntity } from './uso-lenguaje.reducer';
 
@@ -33,7 +32,7 @@ export const UsoLenguajeDeleteDialog = (props: IUsoLenguajeDeleteDialogProps) =>
   const { usoLenguajeEntity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>
+      <ModalHeader toggle={handleClose} data-cy="usoLenguajeDeleteDialogHeading">
         <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
       </ModalHeader>
       <ModalBody id="cdiApp.usoLenguaje.delete.question">
@@ -47,7 +46,7 @@ export const UsoLenguajeDeleteDialog = (props: IUsoLenguajeDeleteDialogProps) =>
           &nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
-        <Button id="jhi-confirm-delete-usoLenguaje" color="danger" onClick={confirmDelete}>
+        <Button id="jhi-confirm-delete-usoLenguaje" data-cy="entityConfirmDeleteButton" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
           &nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>

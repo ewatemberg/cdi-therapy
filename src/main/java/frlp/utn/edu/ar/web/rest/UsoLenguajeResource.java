@@ -1,21 +1,21 @@
 package frlp.utn.edu.ar.web.rest;
 
 import frlp.utn.edu.ar.domain.UsoLenguaje;
+import frlp.utn.edu.ar.repository.UsoLenguajeRepository;
 import frlp.utn.edu.ar.service.UsoLenguajeService;
 import frlp.utn.edu.ar.web.rest.errors.BadRequestAlertException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link frlp.utn.edu.ar.domain.UsoLenguaje}.
@@ -33,8 +33,11 @@ public class UsoLenguajeResource {
 
     private final UsoLenguajeService usoLenguajeService;
 
-    public UsoLenguajeResource(UsoLenguajeService usoLenguajeService) {
+    private final UsoLenguajeRepository usoLenguajeRepository;
+
+    public UsoLenguajeResource(UsoLenguajeService usoLenguajeService, UsoLenguajeRepository usoLenguajeRepository) {
         this.usoLenguajeService = usoLenguajeService;
+        this.usoLenguajeRepository = usoLenguajeRepository;
     }
 
     /**
@@ -51,30 +54,80 @@ public class UsoLenguajeResource {
             throw new BadRequestAlertException("A new usoLenguaje cannot already have an ID", ENTITY_NAME, "idexists");
         }
         UsoLenguaje result = usoLenguajeService.save(usoLenguaje);
-        return ResponseEntity.created(new URI("/api/uso-lenguajes/" + result.getId()))
+        return ResponseEntity
+            .created(new URI("/api/uso-lenguajes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /uso-lenguajes} : Updates an existing usoLenguaje.
+     * {@code PUT  /uso-lenguajes/:id} : Updates an existing usoLenguaje.
      *
+     * @param id the id of the usoLenguaje to save.
      * @param usoLenguaje the usoLenguaje to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated usoLenguaje,
      * or with status {@code 400 (Bad Request)} if the usoLenguaje is not valid,
      * or with status {@code 500 (Internal Server Error)} if the usoLenguaje couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/uso-lenguajes")
-    public ResponseEntity<UsoLenguaje> updateUsoLenguaje(@RequestBody UsoLenguaje usoLenguaje) throws URISyntaxException {
-        log.debug("REST request to update UsoLenguaje : {}", usoLenguaje);
+    @PutMapping("/uso-lenguajes/{id}")
+    public ResponseEntity<UsoLenguaje> updateUsoLenguaje(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody UsoLenguaje usoLenguaje
+    ) throws URISyntaxException {
+        log.debug("REST request to update UsoLenguaje : {}, {}", id, usoLenguaje);
         if (usoLenguaje.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!Objects.equals(id, usoLenguaje.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!usoLenguajeRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         UsoLenguaje result = usoLenguajeService.save(usoLenguaje);
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, usoLenguaje.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code PATCH  /uso-lenguajes/:id} : Partial updates given fields of an existing usoLenguaje, field will ignore if it is null
+     *
+     * @param id the id of the usoLenguaje to save.
+     * @param usoLenguaje the usoLenguaje to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated usoLenguaje,
+     * or with status {@code 400 (Bad Request)} if the usoLenguaje is not valid,
+     * or with status {@code 404 (Not Found)} if the usoLenguaje is not found,
+     * or with status {@code 500 (Internal Server Error)} if the usoLenguaje couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/uso-lenguajes/{id}", consumes = "application/merge-patch+json")
+    public ResponseEntity<UsoLenguaje> partialUpdateUsoLenguaje(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody UsoLenguaje usoLenguaje
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update UsoLenguaje partially : {}, {}", id, usoLenguaje);
+        if (usoLenguaje.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, usoLenguaje.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!usoLenguajeRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<UsoLenguaje> result = usoLenguajeService.partialUpdate(usoLenguaje);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, usoLenguaje.getId().toString())
+        );
     }
 
     /**
@@ -111,6 +164,9 @@ public class UsoLenguajeResource {
     public ResponseEntity<Void> deleteUsoLenguaje(@PathVariable Long id) {
         log.debug("REST request to delete UsoLenguaje : {}", id);
         usoLenguajeService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

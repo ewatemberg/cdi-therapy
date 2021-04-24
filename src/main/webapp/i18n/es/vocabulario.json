@@ -3,6 +3,7 @@
     "vocabulario": {
       "home": {
         "title": "Vocabularios",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Vocabulario",
         "createOrEditLabel": "Crear o editar Vocabulario",
         "notFound": "Ningún Vocabularios encontrado"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Vocabulario"
       },
+      "id": "ID",
       "palabra": "Palabra",
       "categoria": "Categoria",
       "seccionA": "Seccion A"

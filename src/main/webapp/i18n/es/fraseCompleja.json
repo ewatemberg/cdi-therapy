@@ -3,6 +3,7 @@
     "fraseCompleja": {
       "home": {
         "title": "Frase Complejas",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Frase Compleja",
         "createOrEditLabel": "Crear o editar Frase Compleja",
         "notFound": "Ningún Frase Complejas encontrado"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Frase Compleja"
       },
+      "id": "ID",
       "frase": "Frase",
       "seccionD": "Seccion D"
     }

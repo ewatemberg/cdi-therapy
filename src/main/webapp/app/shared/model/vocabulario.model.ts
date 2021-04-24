@@ -3,9 +3,9 @@ import { CategoriaSemantica } from 'app/shared/model/enumerations/categoria-sema
 
 export interface IVocabulario {
   id?: number;
-  palabra?: string;
-  categoria?: CategoriaSemantica;
-  seccionA?: ISeccionA;
+  palabra?: string | null;
+  categoria?: CategoriaSemantica | null;
+  seccionAS?: ISeccionA[] | null;
 }
 
 export const defaultValue: Readonly<IVocabulario> = {};

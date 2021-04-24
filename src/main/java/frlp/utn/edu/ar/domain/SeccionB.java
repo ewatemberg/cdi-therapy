@@ -1,12 +1,8 @@
 package frlp.utn.edu.ar.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.*;
 
 /**
  * A SeccionB.
@@ -24,12 +20,13 @@ public class SeccionB implements Serializable {
     @Column(name = "valor")
     private Integer valor;
 
-    @OneToMany(mappedBy = "seccionB")
-    private Set<UsoLenguaje> usoLenguajes = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "seccionAS", "seccionBS", "seccionCS", "seccionDS", "paciente" }, allowSetters = true)
+    private Cuestionario cuestionario;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "seccionBS", allowSetters = true)
-    private Cuestionario cuestionario;
+    @JsonIgnoreProperties(value = { "seccionBS" }, allowSetters = true)
+    private UsoLenguaje usoLenguaje;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -40,8 +37,13 @@ public class SeccionB implements Serializable {
         this.id = id;
     }
 
+    public SeccionB id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public Integer getValor() {
-        return valor;
+        return this.valor;
     }
 
     public SeccionB valor(Integer valor) {
@@ -53,43 +55,32 @@ public class SeccionB implements Serializable {
         this.valor = valor;
     }
 
-    public Set<UsoLenguaje> getUsoLenguajes() {
-        return usoLenguajes;
-    }
-
-    public SeccionB usoLenguajes(Set<UsoLenguaje> usoLenguajes) {
-        this.usoLenguajes = usoLenguajes;
-        return this;
-    }
-
-    public SeccionB addUsoLenguaje(UsoLenguaje usoLenguaje) {
-        this.usoLenguajes.add(usoLenguaje);
-        usoLenguaje.setSeccionB(this);
-        return this;
-    }
-
-    public SeccionB removeUsoLenguaje(UsoLenguaje usoLenguaje) {
-        this.usoLenguajes.remove(usoLenguaje);
-        usoLenguaje.setSeccionB(null);
-        return this;
-    }
-
-    public void setUsoLenguajes(Set<UsoLenguaje> usoLenguajes) {
-        this.usoLenguajes = usoLenguajes;
-    }
-
     public Cuestionario getCuestionario() {
-        return cuestionario;
+        return this.cuestionario;
     }
 
     public SeccionB cuestionario(Cuestionario cuestionario) {
-        this.cuestionario = cuestionario;
+        this.setCuestionario(cuestionario);
         return this;
     }
 
     public void setCuestionario(Cuestionario cuestionario) {
         this.cuestionario = cuestionario;
     }
+
+    public UsoLenguaje getUsoLenguaje() {
+        return this.usoLenguaje;
+    }
+
+    public SeccionB usoLenguaje(UsoLenguaje usoLenguaje) {
+        this.setUsoLenguaje(usoLenguaje);
+        return this;
+    }
+
+    public void setUsoLenguaje(UsoLenguaje usoLenguaje) {
+        this.usoLenguaje = usoLenguaje;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -105,7 +96,8 @@ public class SeccionB implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

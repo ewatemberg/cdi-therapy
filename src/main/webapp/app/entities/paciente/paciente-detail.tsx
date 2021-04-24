@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
+import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './paciente.reducer';
-import { IPaciente } from 'app/shared/model/paciente.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface IPacienteDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -21,10 +20,16 @@ export const PacienteDetail = (props: IPacienteDetailProps) => {
   return (
     <Row>
       <Col md="8">
-        <h2>
-          <Translate contentKey="cdiApp.paciente.detail.title">Paciente</Translate> [<b>{pacienteEntity.id}</b>]
+        <h2 data-cy="pacienteDetailsHeading">
+          <Translate contentKey="cdiApp.paciente.detail.title">Paciente</Translate>
         </h2>
         <dl className="jh-entity-details">
+          <dt>
+            <span id="id">
+              <Translate contentKey="global.field.id">ID</Translate>
+            </span>
+          </dt>
+          <dd>{pacienteEntity.id}</dd>
           <dt>
             <span id="nombres">
               <Translate contentKey="cdiApp.paciente.nombres">Nombres</Translate>
@@ -162,7 +167,7 @@ export const PacienteDetail = (props: IPacienteDetailProps) => {
           </dt>
           <dd>{pacienteEntity.lugarOrigenPadre}</dd>
         </dl>
-        <Button tag={Link} to="/paciente" replace color="info">
+        <Button tag={Link} to="/paciente" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
           <span className="d-none d-md-inline">
             <Translate contentKey="entity.action.back">Back</Translate>

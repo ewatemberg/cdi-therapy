@@ -1,13 +1,14 @@
 package frlp.utn.edu.ar.domain;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import frlp.utn.edu.ar.web.rest.TestUtil;
 
-public class SeccionATest {
+import frlp.utn.edu.ar.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
+
+class SeccionATest {
 
     @Test
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(SeccionA.class);
         SeccionA seccionA1 = new SeccionA();
         seccionA1.setId(1L);

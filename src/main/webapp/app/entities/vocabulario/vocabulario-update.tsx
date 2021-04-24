@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ISeccionA } from 'app/shared/model/seccion-a.model';
-import { getEntities as getSeccionAs } from 'app/entities/seccion-a/seccion-a.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './vocabulario.reducer';
 import { IVocabulario } from 'app/shared/model/vocabulario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +15,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IVocabularioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
-  const [seccionAId, setSeccionAId] = useState('0');
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { vocabularioEntity, seccionAS, loading, updating } = props;
+  const { vocabularioEntity, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/vocabulario');
@@ -32,8 +29,6 @@ export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
-
-    props.getSeccionAs();
   }, []);
 
   useEffect(() => {
@@ -61,7 +56,7 @@ export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.vocabulario.home.createOrEditLabel">
+          <h2 id="cdiApp.vocabulario.home.createOrEditLabel" data-cy="VocabularioCreateUpdateHeading">
             <Translate contentKey="cdiApp.vocabulario.home.createOrEditLabel">Create or edit a Vocabulario</Translate>
           </h2>
         </Col>
@@ -84,7 +79,7 @@ export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
                 <Label id="palabraLabel" for="vocabulario-palabra">
                   <Translate contentKey="cdiApp.vocabulario.palabra">Palabra</Translate>
                 </Label>
-                <AvField id="vocabulario-palabra" type="text" name="palabra" />
+                <AvField id="vocabulario-palabra" data-cy="palabra" type="text" name="palabra" />
               </AvGroup>
               <AvGroup>
                 <Label id="categoriaLabel" for="vocabulario-categoria">
@@ -92,6 +87,7 @@ export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
                 </Label>
                 <AvInput
                   id="vocabulario-categoria"
+                  data-cy="categoria"
                   type="select"
                   className="form-control"
                   name="categoria"
@@ -119,21 +115,6 @@ export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
                   <option value="LOCATIVOS">{translate('cdiApp.CategoriaSemantica.LOCATIVOS')}</option>
                 </AvInput>
               </AvGroup>
-              <AvGroup>
-                <Label for="vocabulario-seccionA">
-                  <Translate contentKey="cdiApp.vocabulario.seccionA">Seccion A</Translate>
-                </Label>
-                <AvInput id="vocabulario-seccionA" type="select" className="form-control" name="seccionA.id">
-                  <option value="" key="0" />
-                  {seccionAS
-                    ? seccionAS.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/vocabulario" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -142,7 +123,7 @@ export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -156,7 +137,6 @@ export const VocabularioUpdate = (props: IVocabularioUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  seccionAS: storeState.seccionA.entities,
   vocabularioEntity: storeState.vocabulario.entity,
   loading: storeState.vocabulario.loading,
   updating: storeState.vocabulario.updating,
@@ -164,7 +144,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSeccionAs,
   getEntity,
   updateEntity,
   createEntity,

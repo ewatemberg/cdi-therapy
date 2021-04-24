@@ -1,40 +1,42 @@
 package frlp.utn.edu.ar.web.rest;
 
-import frlp.utn.edu.ar.CdiApp;
-import frlp.utn.edu.ar.domain.Cuestionario;
-import frlp.utn.edu.ar.repository.CuestionarioRepository;
-import frlp.utn.edu.ar.service.CuestionarioService;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
-import javax.persistence.EntityManager;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import frlp.utn.edu.ar.IntegrationTest;
+import frlp.utn.edu.ar.domain.Cuestionario;
+import frlp.utn.edu.ar.repository.CuestionarioRepository;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Integration tests for the {@link CuestionarioResource} REST controller.
  */
-@SpringBootTest(classes = CdiApp.class)
+@IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-public class CuestionarioResourceIT {
+class CuestionarioResourceIT {
+
+    private static final String ENTITY_API_URL = "/api/cuestionarios";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CuestionarioRepository cuestionarioRepository;
-
-    @Autowired
-    private CuestionarioService cuestionarioService;
 
     @Autowired
     private EntityManager em;
@@ -54,6 +56,7 @@ public class CuestionarioResourceIT {
         Cuestionario cuestionario = new Cuestionario();
         return cuestionario;
     }
+
     /**
      * Create an updated entity for this test.
      *
@@ -72,12 +75,11 @@ public class CuestionarioResourceIT {
 
     @Test
     @Transactional
-    public void createCuestionario() throws Exception {
+    void createCuestionario() throws Exception {
         int databaseSizeBeforeCreate = cuestionarioRepository.findAll().size();
         // Create the Cuestionario
-        restCuestionarioMockMvc.perform(post("/api/cuestionarios")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cuestionario)))
+        restCuestionarioMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(cuestionario)))
             .andExpect(status().isCreated());
 
         // Validate the Cuestionario in the database
@@ -88,16 +90,15 @@ public class CuestionarioResourceIT {
 
     @Test
     @Transactional
-    public void createCuestionarioWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = cuestionarioRepository.findAll().size();
-
+    void createCuestionarioWithExistingId() throws Exception {
         // Create the Cuestionario with an existing ID
         cuestionario.setId(1L);
 
+        int databaseSizeBeforeCreate = cuestionarioRepository.findAll().size();
+
         // An entity with an existing ID cannot be created, so this API call must fail
-        restCuestionarioMockMvc.perform(post("/api/cuestionarios")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cuestionario)))
+        restCuestionarioMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(cuestionario)))
             .andExpect(status().isBadRequest());
 
         // Validate the Cuestionario in the database
@@ -105,45 +106,46 @@ public class CuestionarioResourceIT {
         assertThat(cuestionarioList).hasSize(databaseSizeBeforeCreate);
     }
 
-
     @Test
     @Transactional
-    public void getAllCuestionarios() throws Exception {
+    void getAllCuestionarios() throws Exception {
         // Initialize the database
         cuestionarioRepository.saveAndFlush(cuestionario);
 
         // Get all the cuestionarioList
-        restCuestionarioMockMvc.perform(get("/api/cuestionarios?sort=id,desc"))
+        restCuestionarioMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cuestionario.getId().intValue())));
     }
-    
+
     @Test
     @Transactional
-    public void getCuestionario() throws Exception {
+    void getCuestionario() throws Exception {
         // Initialize the database
         cuestionarioRepository.saveAndFlush(cuestionario);
 
         // Get the cuestionario
-        restCuestionarioMockMvc.perform(get("/api/cuestionarios/{id}", cuestionario.getId()))
+        restCuestionarioMockMvc
+            .perform(get(ENTITY_API_URL_ID, cuestionario.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cuestionario.getId().intValue()));
     }
+
     @Test
     @Transactional
-    public void getNonExistingCuestionario() throws Exception {
+    void getNonExistingCuestionario() throws Exception {
         // Get the cuestionario
-        restCuestionarioMockMvc.perform(get("/api/cuestionarios/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+        restCuestionarioMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updateCuestionario() throws Exception {
+    void putNewCuestionario() throws Exception {
         // Initialize the database
-        cuestionarioService.save(cuestionario);
+        cuestionarioRepository.saveAndFlush(cuestionario);
 
         int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
 
@@ -152,9 +154,12 @@ public class CuestionarioResourceIT {
         // Disconnect from session so that the updates on updatedCuestionario are not directly saved in db
         em.detach(updatedCuestionario);
 
-        restCuestionarioMockMvc.perform(put("/api/cuestionarios")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedCuestionario)))
+        restCuestionarioMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, updatedCuestionario.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(updatedCuestionario))
+            )
             .andExpect(status().isOk());
 
         // Validate the Cuestionario in the database
@@ -165,13 +170,17 @@ public class CuestionarioResourceIT {
 
     @Test
     @Transactional
-    public void updateNonExistingCuestionario() throws Exception {
+    void putNonExistingCuestionario() throws Exception {
         int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+        cuestionario.setId(count.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restCuestionarioMockMvc.perform(put("/api/cuestionarios")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cuestionario)))
+        restCuestionarioMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, cuestionario.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(cuestionario))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the Cuestionario in the database
@@ -181,15 +190,161 @@ public class CuestionarioResourceIT {
 
     @Test
     @Transactional
-    public void deleteCuestionario() throws Exception {
+    void putWithIdMismatchCuestionario() throws Exception {
+        int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+        cuestionario.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCuestionarioMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(cuestionario))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Cuestionario in the database
+        List<Cuestionario> cuestionarioList = cuestionarioRepository.findAll();
+        assertThat(cuestionarioList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void putWithMissingIdPathParamCuestionario() throws Exception {
+        int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+        cuestionario.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCuestionarioMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(cuestionario)))
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Cuestionario in the database
+        List<Cuestionario> cuestionarioList = cuestionarioRepository.findAll();
+        assertThat(cuestionarioList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void partialUpdateCuestionarioWithPatch() throws Exception {
         // Initialize the database
-        cuestionarioService.save(cuestionario);
+        cuestionarioRepository.saveAndFlush(cuestionario);
+
+        int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+
+        // Update the cuestionario using partial update
+        Cuestionario partialUpdatedCuestionario = new Cuestionario();
+        partialUpdatedCuestionario.setId(cuestionario.getId());
+
+        restCuestionarioMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedCuestionario.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedCuestionario))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Cuestionario in the database
+        List<Cuestionario> cuestionarioList = cuestionarioRepository.findAll();
+        assertThat(cuestionarioList).hasSize(databaseSizeBeforeUpdate);
+        Cuestionario testCuestionario = cuestionarioList.get(cuestionarioList.size() - 1);
+    }
+
+    @Test
+    @Transactional
+    void fullUpdateCuestionarioWithPatch() throws Exception {
+        // Initialize the database
+        cuestionarioRepository.saveAndFlush(cuestionario);
+
+        int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+
+        // Update the cuestionario using partial update
+        Cuestionario partialUpdatedCuestionario = new Cuestionario();
+        partialUpdatedCuestionario.setId(cuestionario.getId());
+
+        restCuestionarioMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedCuestionario.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedCuestionario))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Cuestionario in the database
+        List<Cuestionario> cuestionarioList = cuestionarioRepository.findAll();
+        assertThat(cuestionarioList).hasSize(databaseSizeBeforeUpdate);
+        Cuestionario testCuestionario = cuestionarioList.get(cuestionarioList.size() - 1);
+    }
+
+    @Test
+    @Transactional
+    void patchNonExistingCuestionario() throws Exception {
+        int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+        cuestionario.setId(count.incrementAndGet());
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restCuestionarioMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, cuestionario.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(cuestionario))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Cuestionario in the database
+        List<Cuestionario> cuestionarioList = cuestionarioRepository.findAll();
+        assertThat(cuestionarioList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithIdMismatchCuestionario() throws Exception {
+        int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+        cuestionario.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCuestionarioMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(cuestionario))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Cuestionario in the database
+        List<Cuestionario> cuestionarioList = cuestionarioRepository.findAll();
+        assertThat(cuestionarioList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithMissingIdPathParamCuestionario() throws Exception {
+        int databaseSizeBeforeUpdate = cuestionarioRepository.findAll().size();
+        cuestionario.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCuestionarioMockMvc
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(cuestionario))
+            )
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Cuestionario in the database
+        List<Cuestionario> cuestionarioList = cuestionarioRepository.findAll();
+        assertThat(cuestionarioList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void deleteCuestionario() throws Exception {
+        // Initialize the database
+        cuestionarioRepository.saveAndFlush(cuestionario);
 
         int databaseSizeBeforeDelete = cuestionarioRepository.findAll().size();
 
         // Delete the cuestionario
-        restCuestionarioMockMvc.perform(delete("/api/cuestionarios/{id}", cuestionario.getId())
-            .accept(MediaType.APPLICATION_JSON))
+        restCuestionarioMockMvc
+            .perform(delete(ENTITY_API_URL_ID, cuestionario.getId()).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

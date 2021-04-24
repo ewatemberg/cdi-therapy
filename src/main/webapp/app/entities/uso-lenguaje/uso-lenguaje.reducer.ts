@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
   FETCH_USOLENGUAJE: 'usoLenguaje/FETCH_USOLENGUAJE',
   CREATE_USOLENGUAJE: 'usoLenguaje/CREATE_USOLENGUAJE',
   UPDATE_USOLENGUAJE: 'usoLenguaje/UPDATE_USOLENGUAJE',
+  PARTIAL_UPDATE_USOLENGUAJE: 'usoLenguaje/PARTIAL_UPDATE_USOLENGUAJE',
   DELETE_USOLENGUAJE: 'usoLenguaje/DELETE_USOLENGUAJE',
   RESET: 'usoLenguaje/RESET',
 };
@@ -41,6 +42,7 @@ export default (state: UsoLenguajeState = initialState, action): UsoLenguajeStat
     case REQUEST(ACTION_TYPES.CREATE_USOLENGUAJE):
     case REQUEST(ACTION_TYPES.UPDATE_USOLENGUAJE):
     case REQUEST(ACTION_TYPES.DELETE_USOLENGUAJE):
+    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_USOLENGUAJE):
       return {
         ...state,
         errorMessage: null,
@@ -51,6 +53,7 @@ export default (state: UsoLenguajeState = initialState, action): UsoLenguajeStat
     case FAILURE(ACTION_TYPES.FETCH_USOLENGUAJE):
     case FAILURE(ACTION_TYPES.CREATE_USOLENGUAJE):
     case FAILURE(ACTION_TYPES.UPDATE_USOLENGUAJE):
+    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_USOLENGUAJE):
     case FAILURE(ACTION_TYPES.DELETE_USOLENGUAJE):
       return {
         ...state,
@@ -73,6 +76,7 @@ export default (state: UsoLenguajeState = initialState, action): UsoLenguajeStat
       };
     case SUCCESS(ACTION_TYPES.CREATE_USOLENGUAJE):
     case SUCCESS(ACTION_TYPES.UPDATE_USOLENGUAJE):
+    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_USOLENGUAJE):
       return {
         ...state,
         updating: false,
@@ -124,7 +128,15 @@ export const createEntity: ICrudPutAction<IUsoLenguaje> = entity => async dispat
 export const updateEntity: ICrudPutAction<IUsoLenguaje> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USOLENGUAJE,
-    payload: axios.put(apiUrl, cleanEntity(entity)),
+    payload: axios.put(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
+  });
+  return result;
+};
+
+export const partialUpdate: ICrudPutAction<IUsoLenguaje> = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.PARTIAL_UPDATE_USOLENGUAJE,
+    payload: axios.patch(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
   });
   return result;
 };

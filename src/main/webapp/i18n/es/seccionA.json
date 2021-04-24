@@ -3,6 +3,7 @@
     "seccionA": {
       "home": {
         "title": "Seccion AS",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Seccion A",
         "createOrEditLabel": "Crear o editar Seccion A",
         "notFound": "Ningún Seccion AS encontrado"
@@ -16,10 +17,11 @@
       "detail": {
         "title": "Seccion A"
       },
+      "id": "ID",
       "descripcion": "Descripcion",
       "chequeado": "Chequeado",
-      "vocabulario": "Vocabulario",
-      "cuestionario": "Cuestionario"
+      "cuestionario": "Cuestionario",
+      "vocabulario": "Vocabulario"
     }
   }
 }

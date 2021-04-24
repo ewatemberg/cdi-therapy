@@ -1,7 +1,6 @@
 package frlp.utn.edu.ar.service;
 
 import frlp.utn.edu.ar.domain.FormaVerbal;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import java.util.Optional;
  * Service Interface for managing {@link FormaVerbal}.
  */
 public interface FormaVerbalService {
-
     /**
      * Save a formaVerbal.
      *
@@ -19,12 +17,19 @@ public interface FormaVerbalService {
     FormaVerbal save(FormaVerbal formaVerbal);
 
     /**
+     * Partially updates a formaVerbal.
+     *
+     * @param formaVerbal the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<FormaVerbal> partialUpdate(FormaVerbal formaVerbal);
+
+    /**
      * Get all the formaVerbals.
      *
      * @return the list of entities.
      */
     List<FormaVerbal> findAll();
-
 
     /**
      * Get the "id" formaVerbal.

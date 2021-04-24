@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -15,7 +15,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPacienteUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const PacienteUpdate = (props: IPacienteUpdateProps) => {
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   const { pacienteEntity, loading, updating } = props;
 
@@ -56,7 +56,7 @@ export const PacienteUpdate = (props: IPacienteUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.paciente.home.createOrEditLabel">
+          <h2 id="cdiApp.paciente.home.createOrEditLabel" data-cy="PacienteCreateUpdateHeading">
             <Translate contentKey="cdiApp.paciente.home.createOrEditLabel">Create or edit a Paciente</Translate>
           </h2>
         </Col>
@@ -79,47 +79,59 @@ export const PacienteUpdate = (props: IPacienteUpdateProps) => {
                 <Label id="nombresLabel" for="paciente-nombres">
                   <Translate contentKey="cdiApp.paciente.nombres">Nombres</Translate>
                 </Label>
-                <AvField id="paciente-nombres" type="text" name="nombres" />
+                <AvField id="paciente-nombres" data-cy="nombres" type="text" name="nombres" />
               </AvGroup>
               <AvGroup>
                 <Label id="apellidosLabel" for="paciente-apellidos">
                   <Translate contentKey="cdiApp.paciente.apellidos">Apellidos</Translate>
                 </Label>
-                <AvField id="paciente-apellidos" type="text" name="apellidos" />
+                <AvField id="paciente-apellidos" data-cy="apellidos" type="text" name="apellidos" />
               </AvGroup>
               <AvGroup>
                 <Label id="obraSocialLabel" for="paciente-obraSocial">
                   <Translate contentKey="cdiApp.paciente.obraSocial">Obra Social</Translate>
                 </Label>
-                <AvField id="paciente-obraSocial" type="text" name="obraSocial" />
+                <AvField id="paciente-obraSocial" data-cy="obraSocial" type="text" name="obraSocial" />
               </AvGroup>
               <AvGroup>
                 <Label id="dniLabel" for="paciente-dni">
                   <Translate contentKey="cdiApp.paciente.dni">Dni</Translate>
                 </Label>
-                <AvField id="paciente-dni" type="text" name="dni" />
+                <AvField id="paciente-dni" data-cy="dni" type="text" name="dni" />
               </AvGroup>
               <AvGroup>
                 <Label id="fechaNacimientoLabel" for="paciente-fechaNacimiento">
                   <Translate contentKey="cdiApp.paciente.fechaNacimiento">Fecha Nacimiento</Translate>
                 </Label>
-                <AvField id="paciente-fechaNacimiento" type="date" className="form-control" name="fechaNacimiento" />
+                <AvField
+                  id="paciente-fechaNacimiento"
+                  data-cy="fechaNacimiento"
+                  type="date"
+                  className="form-control"
+                  name="fechaNacimiento"
+                />
               </AvGroup>
               <AvGroup>
                 <Label id="lugarNacimientoLabel" for="paciente-lugarNacimiento">
                   <Translate contentKey="cdiApp.paciente.lugarNacimiento">Lugar Nacimiento</Translate>
                 </Label>
-                <AvField id="paciente-lugarNacimiento" type="text" name="lugarNacimiento" />
+                <AvField id="paciente-lugarNacimiento" data-cy="lugarNacimiento" type="text" name="lugarNacimiento" />
               </AvGroup>
               <AvGroup>
                 <Label id="generoLabel" for="paciente-genero">
                   <Translate contentKey="cdiApp.paciente.genero">Genero</Translate>
                 </Label>
-                <AvField id="paciente-genero" type="text" name="genero" />
+                <AvField id="paciente-genero" data-cy="genero" type="text" name="genero" />
               </AvGroup>
               <AvGroup check>
                 <Label id="nacioAntes9MesesLabel">
-                  <AvInput id="paciente-nacioAntes9Meses" type="checkbox" className="form-check-input" name="nacioAntes9Meses" />
+                  <AvInput
+                    id="paciente-nacioAntes9Meses"
+                    data-cy="nacioAntes9Meses"
+                    type="checkbox"
+                    className="form-check-input"
+                    name="nacioAntes9Meses"
+                  />
                   <Translate contentKey="cdiApp.paciente.nacioAntes9Meses">Nacio Antes 9 Meses</Translate>
                 </Label>
               </AvGroup>
@@ -127,18 +139,25 @@ export const PacienteUpdate = (props: IPacienteUpdateProps) => {
                 <Label id="semanasGestacionLabel" for="paciente-semanasGestacion">
                   <Translate contentKey="cdiApp.paciente.semanasGestacion">Semanas Gestacion</Translate>
                 </Label>
-                <AvField id="paciente-semanasGestacion" type="string" className="form-control" name="semanasGestacion" />
+                <AvField
+                  id="paciente-semanasGestacion"
+                  data-cy="semanasGestacion"
+                  type="string"
+                  className="form-control"
+                  name="semanasGestacion"
+                />
               </AvGroup>
               <AvGroup>
                 <Label id="pesoAlNacerLabel" for="paciente-pesoAlNacer">
                   <Translate contentKey="cdiApp.paciente.pesoAlNacer">Peso Al Nacer</Translate>
                 </Label>
-                <AvField id="paciente-pesoAlNacer" type="text" name="pesoAlNacer" />
+                <AvField id="paciente-pesoAlNacer" data-cy="pesoAlNacer" type="text" name="pesoAlNacer" />
               </AvGroup>
               <AvGroup check>
                 <Label id="enfermedadAuditivaLenguajeLabel">
                   <AvInput
                     id="paciente-enfermedadAuditivaLenguaje"
+                    data-cy="enfermedadAuditivaLenguaje"
                     type="checkbox"
                     className="form-check-input"
                     name="enfermedadAuditivaLenguaje"
@@ -152,11 +171,22 @@ export const PacienteUpdate = (props: IPacienteUpdateProps) => {
                     Descripcion Problema Auditivo Lenguaje
                   </Translate>
                 </Label>
-                <AvField id="paciente-descripcionProblemaAuditivoLenguaje" type="text" name="descripcionProblemaAuditivoLenguaje" />
+                <AvField
+                  id="paciente-descripcionProblemaAuditivoLenguaje"
+                  data-cy="descripcionProblemaAuditivoLenguaje"
+                  type="text"
+                  name="descripcionProblemaAuditivoLenguaje"
+                />
               </AvGroup>
               <AvGroup check>
                 <Label id="infeccionesOidoLabel">
-                  <AvInput id="paciente-infeccionesOido" type="checkbox" className="form-check-input" name="infeccionesOido" />
+                  <AvInput
+                    id="paciente-infeccionesOido"
+                    data-cy="infeccionesOido"
+                    type="checkbox"
+                    className="form-check-input"
+                    name="infeccionesOido"
+                  />
                   <Translate contentKey="cdiApp.paciente.infeccionesOido">Infecciones Oido</Translate>
                 </Label>
               </AvGroup>
@@ -164,11 +194,23 @@ export const PacienteUpdate = (props: IPacienteUpdateProps) => {
                 <Label id="totalInfeccionesAnualLabel" for="paciente-totalInfeccionesAnual">
                   <Translate contentKey="cdiApp.paciente.totalInfeccionesAnual">Total Infecciones Anual</Translate>
                 </Label>
-                <AvField id="paciente-totalInfeccionesAnual" type="string" className="form-control" name="totalInfeccionesAnual" />
+                <AvField
+                  id="paciente-totalInfeccionesAnual"
+                  data-cy="totalInfeccionesAnual"
+                  type="string"
+                  className="form-control"
+                  name="totalInfeccionesAnual"
+                />
               </AvGroup>
               <AvGroup check>
                 <Label id="problemaSaludLabel">
-                  <AvInput id="paciente-problemaSalud" type="checkbox" className="form-check-input" name="problemaSalud" />
+                  <AvInput
+                    id="paciente-problemaSalud"
+                    data-cy="problemaSalud"
+                    type="checkbox"
+                    className="form-check-input"
+                    name="problemaSalud"
+                  />
                   <Translate contentKey="cdiApp.paciente.problemaSalud">Problema Salud</Translate>
                 </Label>
               </AvGroup>
@@ -176,43 +218,48 @@ export const PacienteUpdate = (props: IPacienteUpdateProps) => {
                 <Label id="descripcionProblemaSaludLabel" for="paciente-descripcionProblemaSalud">
                   <Translate contentKey="cdiApp.paciente.descripcionProblemaSalud">Descripcion Problema Salud</Translate>
                 </Label>
-                <AvField id="paciente-descripcionProblemaSalud" type="text" name="descripcionProblemaSalud" />
+                <AvField
+                  id="paciente-descripcionProblemaSalud"
+                  data-cy="descripcionProblemaSalud"
+                  type="text"
+                  name="descripcionProblemaSalud"
+                />
               </AvGroup>
               <AvGroup>
                 <Label id="nombreMadreLabel" for="paciente-nombreMadre">
                   <Translate contentKey="cdiApp.paciente.nombreMadre">Nombre Madre</Translate>
                 </Label>
-                <AvField id="paciente-nombreMadre" type="text" name="nombreMadre" />
+                <AvField id="paciente-nombreMadre" data-cy="nombreMadre" type="text" name="nombreMadre" />
               </AvGroup>
               <AvGroup>
                 <Label id="edadMadreLabel" for="paciente-edadMadre">
                   <Translate contentKey="cdiApp.paciente.edadMadre">Edad Madre</Translate>
                 </Label>
-                <AvField id="paciente-edadMadre" type="string" className="form-control" name="edadMadre" />
+                <AvField id="paciente-edadMadre" data-cy="edadMadre" type="string" className="form-control" name="edadMadre" />
               </AvGroup>
               <AvGroup>
                 <Label id="lugarOrigenMadreLabel" for="paciente-lugarOrigenMadre">
                   <Translate contentKey="cdiApp.paciente.lugarOrigenMadre">Lugar Origen Madre</Translate>
                 </Label>
-                <AvField id="paciente-lugarOrigenMadre" type="text" name="lugarOrigenMadre" />
+                <AvField id="paciente-lugarOrigenMadre" data-cy="lugarOrigenMadre" type="text" name="lugarOrigenMadre" />
               </AvGroup>
               <AvGroup>
                 <Label id="nombrePadreLabel" for="paciente-nombrePadre">
                   <Translate contentKey="cdiApp.paciente.nombrePadre">Nombre Padre</Translate>
                 </Label>
-                <AvField id="paciente-nombrePadre" type="text" name="nombrePadre" />
+                <AvField id="paciente-nombrePadre" data-cy="nombrePadre" type="text" name="nombrePadre" />
               </AvGroup>
               <AvGroup>
                 <Label id="edadPadreLabel" for="paciente-edadPadre">
                   <Translate contentKey="cdiApp.paciente.edadPadre">Edad Padre</Translate>
                 </Label>
-                <AvField id="paciente-edadPadre" type="string" className="form-control" name="edadPadre" />
+                <AvField id="paciente-edadPadre" data-cy="edadPadre" type="string" className="form-control" name="edadPadre" />
               </AvGroup>
               <AvGroup>
                 <Label id="lugarOrigenPadreLabel" for="paciente-lugarOrigenPadre">
                   <Translate contentKey="cdiApp.paciente.lugarOrigenPadre">Lugar Origen Padre</Translate>
                 </Label>
-                <AvField id="paciente-lugarOrigenPadre" type="text" name="lugarOrigenPadre" />
+                <AvField id="paciente-lugarOrigenPadre" data-cy="lugarOrigenPadre" type="text" name="lugarOrigenPadre" />
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/paciente" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
@@ -222,7 +269,7 @@ export const PacienteUpdate = (props: IPacienteUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>

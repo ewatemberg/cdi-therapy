@@ -1,21 +1,21 @@
 package frlp.utn.edu.ar.web.rest;
 
 import frlp.utn.edu.ar.domain.Vocabulario;
+import frlp.utn.edu.ar.repository.VocabularioRepository;
 import frlp.utn.edu.ar.service.VocabularioService;
 import frlp.utn.edu.ar.web.rest.errors.BadRequestAlertException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link frlp.utn.edu.ar.domain.Vocabulario}.
@@ -33,8 +33,11 @@ public class VocabularioResource {
 
     private final VocabularioService vocabularioService;
 
-    public VocabularioResource(VocabularioService vocabularioService) {
+    private final VocabularioRepository vocabularioRepository;
+
+    public VocabularioResource(VocabularioService vocabularioService, VocabularioRepository vocabularioRepository) {
         this.vocabularioService = vocabularioService;
+        this.vocabularioRepository = vocabularioRepository;
     }
 
     /**
@@ -51,30 +54,80 @@ public class VocabularioResource {
             throw new BadRequestAlertException("A new vocabulario cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Vocabulario result = vocabularioService.save(vocabulario);
-        return ResponseEntity.created(new URI("/api/vocabularios/" + result.getId()))
+        return ResponseEntity
+            .created(new URI("/api/vocabularios/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /vocabularios} : Updates an existing vocabulario.
+     * {@code PUT  /vocabularios/:id} : Updates an existing vocabulario.
      *
+     * @param id the id of the vocabulario to save.
      * @param vocabulario the vocabulario to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated vocabulario,
      * or with status {@code 400 (Bad Request)} if the vocabulario is not valid,
      * or with status {@code 500 (Internal Server Error)} if the vocabulario couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/vocabularios")
-    public ResponseEntity<Vocabulario> updateVocabulario(@RequestBody Vocabulario vocabulario) throws URISyntaxException {
-        log.debug("REST request to update Vocabulario : {}", vocabulario);
+    @PutMapping("/vocabularios/{id}")
+    public ResponseEntity<Vocabulario> updateVocabulario(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody Vocabulario vocabulario
+    ) throws URISyntaxException {
+        log.debug("REST request to update Vocabulario : {}, {}", id, vocabulario);
         if (vocabulario.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!Objects.equals(id, vocabulario.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!vocabularioRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         Vocabulario result = vocabularioService.save(vocabulario);
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, vocabulario.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code PATCH  /vocabularios/:id} : Partial updates given fields of an existing vocabulario, field will ignore if it is null
+     *
+     * @param id the id of the vocabulario to save.
+     * @param vocabulario the vocabulario to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated vocabulario,
+     * or with status {@code 400 (Bad Request)} if the vocabulario is not valid,
+     * or with status {@code 404 (Not Found)} if the vocabulario is not found,
+     * or with status {@code 500 (Internal Server Error)} if the vocabulario couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/vocabularios/{id}", consumes = "application/merge-patch+json")
+    public ResponseEntity<Vocabulario> partialUpdateVocabulario(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody Vocabulario vocabulario
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update Vocabulario partially : {}, {}", id, vocabulario);
+        if (vocabulario.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, vocabulario.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!vocabularioRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<Vocabulario> result = vocabularioService.partialUpdate(vocabulario);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, vocabulario.getId().toString())
+        );
     }
 
     /**
@@ -111,6 +164,9 @@ public class VocabularioResource {
     public ResponseEntity<Void> deleteVocabulario(@PathVariable Long id) {
         log.debug("REST request to delete Vocabulario : {}", id);
         vocabularioService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

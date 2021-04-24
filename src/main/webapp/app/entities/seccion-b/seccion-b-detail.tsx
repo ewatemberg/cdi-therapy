@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { Translate, ICrudGetAction } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './seccion-b.reducer';
-import { ISeccionB } from 'app/shared/model/seccion-b.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface ISeccionBDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -21,10 +20,16 @@ export const SeccionBDetail = (props: ISeccionBDetailProps) => {
   return (
     <Row>
       <Col md="8">
-        <h2>
-          <Translate contentKey="cdiApp.seccionB.detail.title">SeccionB</Translate> [<b>{seccionBEntity.id}</b>]
+        <h2 data-cy="seccionBDetailsHeading">
+          <Translate contentKey="cdiApp.seccionB.detail.title">SeccionB</Translate>
         </h2>
         <dl className="jh-entity-details">
+          <dt>
+            <span id="id">
+              <Translate contentKey="global.field.id">ID</Translate>
+            </span>
+          </dt>
+          <dd>{seccionBEntity.id}</dd>
           <dt>
             <span id="valor">
               <Translate contentKey="cdiApp.seccionB.valor">Valor</Translate>
@@ -35,8 +40,12 @@ export const SeccionBDetail = (props: ISeccionBDetailProps) => {
             <Translate contentKey="cdiApp.seccionB.cuestionario">Cuestionario</Translate>
           </dt>
           <dd>{seccionBEntity.cuestionario ? seccionBEntity.cuestionario.id : ''}</dd>
+          <dt>
+            <Translate contentKey="cdiApp.seccionB.usoLenguaje">Uso Lenguaje</Translate>
+          </dt>
+          <dd>{seccionBEntity.usoLenguaje ? seccionBEntity.usoLenguaje.id : ''}</dd>
         </dl>
-        <Button tag={Link} to="/seccion-b" replace color="info">
+        <Button tag={Link} to="/seccion-b" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
           <span className="d-none d-md-inline">
             <Translate contentKey="entity.action.back">Back</Translate>

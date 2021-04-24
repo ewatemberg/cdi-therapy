@@ -3,6 +3,7 @@
     "usoLenguaje": {
       "home": {
         "title": "Uso Lenguajes",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Uso Lenguaje",
         "createOrEditLabel": "Crear o editar Uso Lenguaje",
         "notFound": "Ningún Uso Lenguajes encontrado"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Uso Lenguaje"
       },
+      "id": "ID",
       "pregunta": "Pregunta",
       "seccionB": "Seccion B"
     }

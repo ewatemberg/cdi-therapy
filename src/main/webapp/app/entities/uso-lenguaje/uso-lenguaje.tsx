@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-import { Translate, ICrudGetAllAction } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -17,16 +17,26 @@ export const UsoLenguaje = (props: IUsoLenguajeProps) => {
     props.getEntities();
   }, []);
 
+  const handleSyncList = () => {
+    props.getEntities();
+  };
+
   const { usoLenguajeList, match, loading } = props;
   return (
     <div>
-      <h2 id="uso-lenguaje-heading">
+      <h2 id="uso-lenguaje-heading" data-cy="UsoLenguajeHeading">
         <Translate contentKey="cdiApp.usoLenguaje.home.title">Uso Lenguajes</Translate>
-        <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
-          <FontAwesomeIcon icon="plus" />
-          &nbsp;
-          <Translate contentKey="cdiApp.usoLenguaje.home.createLabel">Create new Uso Lenguaje</Translate>
-        </Link>
+        <div className="d-flex justify-content-end">
+          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+            <FontAwesomeIcon icon="sync" spin={loading} />{' '}
+            <Translate contentKey="cdiApp.usoLenguaje.home.refreshListLabel">Refresh List</Translate>
+          </Button>
+          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="cdiApp.usoLenguaje.home.createLabel">Create new Uso Lenguaje</Translate>
+          </Link>
+        </div>
       </h2>
       <div className="table-responsive">
         {usoLenguajeList && usoLenguajeList.length > 0 ? (
@@ -34,42 +44,38 @@ export const UsoLenguaje = (props: IUsoLenguajeProps) => {
             <thead>
               <tr>
                 <th>
-                  <Translate contentKey="global.field.id">ID</Translate>
+                  <Translate contentKey="cdiApp.usoLenguaje.id">ID</Translate>
                 </th>
                 <th>
                   <Translate contentKey="cdiApp.usoLenguaje.pregunta">Pregunta</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="cdiApp.usoLenguaje.seccionB">Seccion B</Translate>
                 </th>
                 <th />
               </tr>
             </thead>
             <tbody>
               {usoLenguajeList.map((usoLenguaje, i) => (
-                <tr key={`entity-${i}`}>
+                <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`${match.url}/${usoLenguaje.id}`} color="link" size="sm">
                       {usoLenguaje.id}
                     </Button>
                   </td>
                   <td>{usoLenguaje.pregunta}</td>
-                  <td>{usoLenguaje.seccionB ? <Link to={`seccion-b/${usoLenguaje.seccionB.id}`}>{usoLenguaje.seccionB.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`${match.url}/${usoLenguaje.id}`} color="info" size="sm">
+                      <Button tag={Link} to={`${match.url}/${usoLenguaje.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${usoLenguaje.id}/edit`} color="primary" size="sm">
+                      <Button tag={Link} to={`${match.url}/${usoLenguaje.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${usoLenguaje.id}/delete`} color="danger" size="sm">
+                      <Button tag={Link} to={`${match.url}/${usoLenguaje.id}/delete`} color="danger" size="sm" data-cy="entityDeleteButton">
                         <FontAwesomeIcon icon="trash" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.delete">Delete</Translate>

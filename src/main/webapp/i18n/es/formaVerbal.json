@@ -3,6 +3,7 @@
     "formaVerbal": {
       "home": {
         "title": "Forma Verbals",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Forma Verbal",
         "createOrEditLabel": "Crear o editar Forma Verbal",
         "notFound": "Ningún Forma Verbals encontrado"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Forma Verbal"
       },
+      "id": "ID",
       "forma": "Forma",
       "seccionC": "Seccion C"
     }

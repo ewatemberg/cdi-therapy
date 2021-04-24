@@ -1,17 +1,14 @@
 package frlp.utn.edu.ar.service;
 
 import frlp.utn.edu.ar.domain.Paciente;
-
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
 
 /**
  * Service Interface for managing {@link Paciente}.
  */
 public interface PacienteService {
-
     /**
      * Save a paciente.
      *
@@ -21,13 +18,20 @@ public interface PacienteService {
     Paciente save(Paciente paciente);
 
     /**
+     * Partially updates a paciente.
+     *
+     * @param paciente the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<Paciente> partialUpdate(Paciente paciente);
+
+    /**
      * Get all the pacientes.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     Page<Paciente> findAll(Pageable pageable);
-
 
     /**
      * Get the "id" paciente.

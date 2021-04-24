@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { ICuestionario } from 'app/shared/model/cuestionario.model';
 import { getEntities as getCuestionarios } from 'app/entities/cuestionario/cuestionario.reducer';
+import { IFraseCompleja } from 'app/shared/model/frase-compleja.model';
+import { getEntities as getFraseComplejas } from 'app/entities/frase-compleja/frase-compleja.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './seccion-d.reducer';
 import { ISeccionD } from 'app/shared/model/seccion-d.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +19,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ISeccionDUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const SeccionDUpdate = (props: ISeccionDUpdateProps) => {
-  const [cuestionarioId, setCuestionarioId] = useState('0');
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { seccionDEntity, cuestionarios, loading, updating } = props;
+  const { seccionDEntity, cuestionarios, fraseComplejas, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/seccion-d' + props.location.search);
@@ -34,6 +35,7 @@ export const SeccionDUpdate = (props: ISeccionDUpdateProps) => {
     }
 
     props.getCuestionarios();
+    props.getFraseComplejas();
   }, []);
 
   useEffect(() => {
@@ -47,6 +49,8 @@ export const SeccionDUpdate = (props: ISeccionDUpdateProps) => {
       const entity = {
         ...seccionDEntity,
         ...values,
+        cuestionario: cuestionarios.find(it => it.id.toString() === values.cuestionarioId.toString()),
+        fraseCompleja: fraseComplejas.find(it => it.id.toString() === values.fraseComplejaId.toString()),
       };
 
       if (isNew) {
@@ -61,7 +65,7 @@ export const SeccionDUpdate = (props: ISeccionDUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.seccionD.home.createOrEditLabel">
+          <h2 id="cdiApp.seccionD.home.createOrEditLabel" data-cy="SeccionDCreateUpdateHeading">
             <Translate contentKey="cdiApp.seccionD.home.createOrEditLabel">Create or edit a SeccionD</Translate>
           </h2>
         </Col>
@@ -84,16 +88,31 @@ export const SeccionDUpdate = (props: ISeccionDUpdateProps) => {
                 <Label id="valorLabel" for="seccion-d-valor">
                   <Translate contentKey="cdiApp.seccionD.valor">Valor</Translate>
                 </Label>
-                <AvField id="seccion-d-valor" type="string" className="form-control" name="valor" />
+                <AvField id="seccion-d-valor" data-cy="valor" type="string" className="form-control" name="valor" />
               </AvGroup>
               <AvGroup>
                 <Label for="seccion-d-cuestionario">
                   <Translate contentKey="cdiApp.seccionD.cuestionario">Cuestionario</Translate>
                 </Label>
-                <AvInput id="seccion-d-cuestionario" type="select" className="form-control" name="cuestionario.id">
+                <AvInput id="seccion-d-cuestionario" data-cy="cuestionario" type="select" className="form-control" name="cuestionarioId">
                   <option value="" key="0" />
                   {cuestionarios
                     ? cuestionarios.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
+              <AvGroup>
+                <Label for="seccion-d-fraseCompleja">
+                  <Translate contentKey="cdiApp.seccionD.fraseCompleja">Frase Compleja</Translate>
+                </Label>
+                <AvInput id="seccion-d-fraseCompleja" data-cy="fraseCompleja" type="select" className="form-control" name="fraseComplejaId">
+                  <option value="" key="0" />
+                  {fraseComplejas
+                    ? fraseComplejas.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
                           {otherEntity.id}
                         </option>
@@ -109,7 +128,7 @@ export const SeccionDUpdate = (props: ISeccionDUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -124,6 +143,7 @@ export const SeccionDUpdate = (props: ISeccionDUpdateProps) => {
 
 const mapStateToProps = (storeState: IRootState) => ({
   cuestionarios: storeState.cuestionario.entities,
+  fraseComplejas: storeState.fraseCompleja.entities,
   seccionDEntity: storeState.seccionD.entity,
   loading: storeState.seccionD.loading,
   updating: storeState.seccionD.updating,
@@ -132,6 +152,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getCuestionarios,
+  getFraseComplejas,
   getEntity,
   updateEntity,
   createEntity,

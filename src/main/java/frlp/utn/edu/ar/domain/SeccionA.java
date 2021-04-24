@@ -1,12 +1,8 @@
 package frlp.utn.edu.ar.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.*;
 
 /**
  * A SeccionA.
@@ -27,12 +23,13 @@ public class SeccionA implements Serializable {
     @Column(name = "chequeado")
     private Boolean chequeado;
 
-    @OneToMany(mappedBy = "seccionA")
-    private Set<Vocabulario> vocabularios = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "seccionAS", "seccionBS", "seccionCS", "seccionDS", "paciente" }, allowSetters = true)
+    private Cuestionario cuestionario;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "seccionAS", allowSetters = true)
-    private Cuestionario cuestionario;
+    @JsonIgnoreProperties(value = { "seccionAS" }, allowSetters = true)
+    private Vocabulario vocabulario;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -43,8 +40,13 @@ public class SeccionA implements Serializable {
         this.id = id;
     }
 
+    public SeccionA id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getDescripcion() {
-        return descripcion;
+        return this.descripcion;
     }
 
     public SeccionA descripcion(String descripcion) {
@@ -56,8 +58,8 @@ public class SeccionA implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Boolean isChequeado() {
-        return chequeado;
+    public Boolean getChequeado() {
+        return this.chequeado;
     }
 
     public SeccionA chequeado(Boolean chequeado) {
@@ -69,43 +71,32 @@ public class SeccionA implements Serializable {
         this.chequeado = chequeado;
     }
 
-    public Set<Vocabulario> getVocabularios() {
-        return vocabularios;
-    }
-
-    public SeccionA vocabularios(Set<Vocabulario> vocabularios) {
-        this.vocabularios = vocabularios;
-        return this;
-    }
-
-    public SeccionA addVocabulario(Vocabulario vocabulario) {
-        this.vocabularios.add(vocabulario);
-        vocabulario.setSeccionA(this);
-        return this;
-    }
-
-    public SeccionA removeVocabulario(Vocabulario vocabulario) {
-        this.vocabularios.remove(vocabulario);
-        vocabulario.setSeccionA(null);
-        return this;
-    }
-
-    public void setVocabularios(Set<Vocabulario> vocabularios) {
-        this.vocabularios = vocabularios;
-    }
-
     public Cuestionario getCuestionario() {
-        return cuestionario;
+        return this.cuestionario;
     }
 
     public SeccionA cuestionario(Cuestionario cuestionario) {
-        this.cuestionario = cuestionario;
+        this.setCuestionario(cuestionario);
         return this;
     }
 
     public void setCuestionario(Cuestionario cuestionario) {
         this.cuestionario = cuestionario;
     }
+
+    public Vocabulario getVocabulario() {
+        return this.vocabulario;
+    }
+
+    public SeccionA vocabulario(Vocabulario vocabulario) {
+        this.setVocabulario(vocabulario);
+        return this;
+    }
+
+    public void setVocabulario(Vocabulario vocabulario) {
+        this.vocabulario = vocabulario;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -121,7 +112,8 @@ public class SeccionA implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore
@@ -130,7 +122,7 @@ public class SeccionA implements Serializable {
         return "SeccionA{" +
             "id=" + getId() +
             ", descripcion='" + getDescripcion() + "'" +
-            ", chequeado='" + isChequeado() + "'" +
+            ", chequeado='" + getChequeado() + "'" +
             "}";
     }
 }

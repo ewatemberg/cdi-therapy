@@ -3,6 +3,7 @@
     "seccionC": {
       "home": {
         "title": "Seccion CS",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Seccion C",
         "createOrEditLabel": "Crear o editar Seccion C",
         "notFound": "Ningún Seccion CS encontrado"
@@ -16,10 +17,11 @@
       "detail": {
         "title": "Seccion C"
       },
+      "id": "ID",
       "descripcion": "Descripcion",
       "valor": "Valor",
-      "formaVerbal": "Forma Verbal",
-      "cuestionario": "Cuestionario"
+      "cuestionario": "Cuestionario",
+      "formaVerbal": "Forma Verbal"
     }
   }
 }

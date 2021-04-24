@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { ICuestionario } from 'app/shared/model/cuestionario.model';
 import { IRootState } from 'app/shared/reducers';
 import { getEntity, deleteEntity } from './cuestionario.reducer';
 
@@ -33,7 +32,7 @@ export const CuestionarioDeleteDialog = (props: ICuestionarioDeleteDialogProps) 
   const { cuestionarioEntity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>
+      <ModalHeader toggle={handleClose} data-cy="cuestionarioDeleteDialogHeading">
         <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
       </ModalHeader>
       <ModalBody id="cdiApp.cuestionario.delete.question">
@@ -47,7 +46,7 @@ export const CuestionarioDeleteDialog = (props: ICuestionarioDeleteDialogProps) 
           &nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
-        <Button id="jhi-confirm-delete-cuestionario" color="danger" onClick={confirmDelete}>
+        <Button id="jhi-confirm-delete-cuestionario" data-cy="entityConfirmDeleteButton" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
           &nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>

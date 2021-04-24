@@ -12,20 +12,18 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "vocabulario",
-      "otherEntityRelationshipName": "seccionA",
-      "relationshipName": "vocabulario"
-    },
-    {
       "relationshipType": "many-to-one",
       "otherEntityName": "cuestionario",
       "otherEntityRelationshipName": "seccionA",
-      "relationshipName": "cuestionario",
-      "otherEntityField": "id"
+      "relationshipName": "cuestionario"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "vocabulario",
+      "otherEntityRelationshipName": "seccionA",
+      "relationshipName": "vocabulario"
     }
   ],
-  "changelogDate": "20201130121446",
   "entityTableName": "seccion_a",
   "dto": "no",
   "pagination": "pagination",
@@ -34,6 +32,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "changelogDate": "20210424221816"
 }

@@ -13,14 +13,12 @@
   ],
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "one-to-many",
       "otherEntityName": "seccionA",
       "otherEntityRelationshipName": "vocabulario",
-      "relationshipName": "seccionA",
-      "otherEntityField": "id"
+      "relationshipName": "seccionA"
     }
   ],
-  "changelogDate": "20201130121846",
   "entityTableName": "vocabulario",
   "dto": "no",
   "pagination": "no",
@@ -29,6 +27,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "changelogDate": "20210424221820"
 }

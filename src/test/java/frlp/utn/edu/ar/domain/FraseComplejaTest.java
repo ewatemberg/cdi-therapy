@@ -1,13 +1,14 @@
 package frlp.utn.edu.ar.domain;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import frlp.utn.edu.ar.web.rest.TestUtil;
 
-public class FraseComplejaTest {
+import frlp.utn.edu.ar.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
+
+class FraseComplejaTest {
 
     @Test
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(FraseCompleja.class);
         FraseCompleja fraseCompleja1 = new FraseCompleja();
         fraseCompleja1.setId(1L);

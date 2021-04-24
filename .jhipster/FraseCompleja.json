@@ -8,14 +8,12 @@
   ],
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "one-to-many",
       "otherEntityName": "seccionD",
       "otherEntityRelationshipName": "fraseCompleja",
-      "relationshipName": "seccionD",
-      "otherEntityField": "id"
+      "relationshipName": "seccionD"
     }
   ],
-  "changelogDate": "20201130122146",
   "entityTableName": "frase_compleja",
   "dto": "no",
   "pagination": "no",
@@ -24,6 +22,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "changelogDate": "20210424221823"
 }

@@ -3,6 +3,7 @@
     "paciente": {
       "home": {
         "title": "Pacientes",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Paciente",
         "createOrEditLabel": "Crear o editar Paciente",
         "notFound": "Ningún Pacientes encontrado"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Paciente"
       },
+      "id": "ID",
       "nombres": "Nombres",
       "apellidos": "Apellidos",
       "obraSocial": "Obra Social",

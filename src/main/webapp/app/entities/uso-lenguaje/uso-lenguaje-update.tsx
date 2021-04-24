@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ISeccionB } from 'app/shared/model/seccion-b.model';
-import { getEntities as getSeccionBs } from 'app/entities/seccion-b/seccion-b.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './uso-lenguaje.reducer';
 import { IUsoLenguaje } from 'app/shared/model/uso-lenguaje.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +15,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IUsoLenguajeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const UsoLenguajeUpdate = (props: IUsoLenguajeUpdateProps) => {
-  const [seccionBId, setSeccionBId] = useState('0');
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { usoLenguajeEntity, seccionBS, loading, updating } = props;
+  const { usoLenguajeEntity, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/uso-lenguaje');
@@ -32,8 +29,6 @@ export const UsoLenguajeUpdate = (props: IUsoLenguajeUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
-
-    props.getSeccionBs();
   }, []);
 
   useEffect(() => {
@@ -61,7 +56,7 @@ export const UsoLenguajeUpdate = (props: IUsoLenguajeUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.usoLenguaje.home.createOrEditLabel">
+          <h2 id="cdiApp.usoLenguaje.home.createOrEditLabel" data-cy="UsoLenguajeCreateUpdateHeading">
             <Translate contentKey="cdiApp.usoLenguaje.home.createOrEditLabel">Create or edit a UsoLenguaje</Translate>
           </h2>
         </Col>
@@ -84,22 +79,7 @@ export const UsoLenguajeUpdate = (props: IUsoLenguajeUpdateProps) => {
                 <Label id="preguntaLabel" for="uso-lenguaje-pregunta">
                   <Translate contentKey="cdiApp.usoLenguaje.pregunta">Pregunta</Translate>
                 </Label>
-                <AvField id="uso-lenguaje-pregunta" type="text" name="pregunta" />
-              </AvGroup>
-              <AvGroup>
-                <Label for="uso-lenguaje-seccionB">
-                  <Translate contentKey="cdiApp.usoLenguaje.seccionB">Seccion B</Translate>
-                </Label>
-                <AvInput id="uso-lenguaje-seccionB" type="select" className="form-control" name="seccionB.id">
-                  <option value="" key="0" />
-                  {seccionBS
-                    ? seccionBS.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
+                <AvField id="uso-lenguaje-pregunta" data-cy="pregunta" type="text" name="pregunta" />
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/uso-lenguaje" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
@@ -109,7 +89,7 @@ export const UsoLenguajeUpdate = (props: IUsoLenguajeUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -123,7 +103,6 @@ export const UsoLenguajeUpdate = (props: IUsoLenguajeUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  seccionBS: storeState.seccionB.entities,
   usoLenguajeEntity: storeState.usoLenguaje.entity,
   loading: storeState.usoLenguaje.loading,
   updating: storeState.usoLenguaje.updating,
@@ -131,7 +110,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSeccionBs,
   getEntity,
   updateEntity,
   createEntity,

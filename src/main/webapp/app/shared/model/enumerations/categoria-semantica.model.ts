@@ -1,4 +1,4 @@
-export const enum CategoriaSemantica {
+export enum CategoriaSemantica {
   SONIDOS = 'SONIDOS',
 
   ANIMAL = 'ANIMAL',

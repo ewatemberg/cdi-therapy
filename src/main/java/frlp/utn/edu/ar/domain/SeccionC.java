@@ -1,12 +1,8 @@
 package frlp.utn.edu.ar.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.*;
 
 /**
  * A SeccionC.
@@ -27,12 +23,13 @@ public class SeccionC implements Serializable {
     @Column(name = "valor")
     private Integer valor;
 
-    @OneToMany(mappedBy = "seccionC")
-    private Set<FormaVerbal> formaVerbals = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "seccionAS", "seccionBS", "seccionCS", "seccionDS", "paciente" }, allowSetters = true)
+    private Cuestionario cuestionario;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "seccionCS", allowSetters = true)
-    private Cuestionario cuestionario;
+    @JsonIgnoreProperties(value = { "seccionCS" }, allowSetters = true)
+    private FormaVerbal formaVerbal;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -43,8 +40,13 @@ public class SeccionC implements Serializable {
         this.id = id;
     }
 
+    public SeccionC id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getDescripcion() {
-        return descripcion;
+        return this.descripcion;
     }
 
     public SeccionC descripcion(String descripcion) {
@@ -57,7 +59,7 @@ public class SeccionC implements Serializable {
     }
 
     public Integer getValor() {
-        return valor;
+        return this.valor;
     }
 
     public SeccionC valor(Integer valor) {
@@ -69,43 +71,32 @@ public class SeccionC implements Serializable {
         this.valor = valor;
     }
 
-    public Set<FormaVerbal> getFormaVerbals() {
-        return formaVerbals;
-    }
-
-    public SeccionC formaVerbals(Set<FormaVerbal> formaVerbals) {
-        this.formaVerbals = formaVerbals;
-        return this;
-    }
-
-    public SeccionC addFormaVerbal(FormaVerbal formaVerbal) {
-        this.formaVerbals.add(formaVerbal);
-        formaVerbal.setSeccionC(this);
-        return this;
-    }
-
-    public SeccionC removeFormaVerbal(FormaVerbal formaVerbal) {
-        this.formaVerbals.remove(formaVerbal);
-        formaVerbal.setSeccionC(null);
-        return this;
-    }
-
-    public void setFormaVerbals(Set<FormaVerbal> formaVerbals) {
-        this.formaVerbals = formaVerbals;
-    }
-
     public Cuestionario getCuestionario() {
-        return cuestionario;
+        return this.cuestionario;
     }
 
     public SeccionC cuestionario(Cuestionario cuestionario) {
-        this.cuestionario = cuestionario;
+        this.setCuestionario(cuestionario);
         return this;
     }
 
     public void setCuestionario(Cuestionario cuestionario) {
         this.cuestionario = cuestionario;
     }
+
+    public FormaVerbal getFormaVerbal() {
+        return this.formaVerbal;
+    }
+
+    public SeccionC formaVerbal(FormaVerbal formaVerbal) {
+        this.setFormaVerbal(formaVerbal);
+        return this;
+    }
+
+    public void setFormaVerbal(FormaVerbal formaVerbal) {
+        this.formaVerbal = formaVerbal;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -121,7 +112,8 @@ public class SeccionC implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

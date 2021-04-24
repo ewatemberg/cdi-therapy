@@ -1,16 +1,14 @@
 package frlp.utn.edu.ar.service.impl;
 
-import frlp.utn.edu.ar.service.VocabularioService;
 import frlp.utn.edu.ar.domain.Vocabulario;
 import frlp.utn.edu.ar.repository.VocabularioRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import frlp.utn.edu.ar.service.VocabularioService;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service Implementation for managing {@link Vocabulario}.
@@ -34,12 +32,32 @@ public class VocabularioServiceImpl implements VocabularioService {
     }
 
     @Override
+    public Optional<Vocabulario> partialUpdate(Vocabulario vocabulario) {
+        log.debug("Request to partially update Vocabulario : {}", vocabulario);
+
+        return vocabularioRepository
+            .findById(vocabulario.getId())
+            .map(
+                existingVocabulario -> {
+                    if (vocabulario.getPalabra() != null) {
+                        existingVocabulario.setPalabra(vocabulario.getPalabra());
+                    }
+                    if (vocabulario.getCategoria() != null) {
+                        existingVocabulario.setCategoria(vocabulario.getCategoria());
+                    }
+
+                    return existingVocabulario;
+                }
+            )
+            .map(vocabularioRepository::save);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Vocabulario> findAll() {
         log.debug("Request to get all Vocabularios");
         return vocabularioRepository.findAll();
     }
-
 
     @Override
     @Transactional(readOnly = true)

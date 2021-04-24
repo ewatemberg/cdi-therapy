@@ -8,20 +8,18 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "usoLenguaje",
-      "otherEntityRelationshipName": "seccionB",
-      "relationshipName": "usoLenguaje"
-    },
-    {
       "relationshipType": "many-to-one",
       "otherEntityName": "cuestionario",
       "otherEntityRelationshipName": "seccionB",
-      "relationshipName": "cuestionario",
-      "otherEntityField": "id"
+      "relationshipName": "cuestionario"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "usoLenguaje",
+      "otherEntityRelationshipName": "seccionB",
+      "relationshipName": "usoLenguaje"
     }
   ],
-  "changelogDate": "20201130121546",
   "entityTableName": "seccion_b",
   "dto": "no",
   "pagination": "pagination",
@@ -30,6 +28,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "changelogDate": "20210424221817"
 }

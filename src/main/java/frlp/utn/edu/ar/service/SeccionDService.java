@@ -1,17 +1,14 @@
 package frlp.utn.edu.ar.service;
 
 import frlp.utn.edu.ar.domain.SeccionD;
-
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
 
 /**
  * Service Interface for managing {@link SeccionD}.
  */
 public interface SeccionDService {
-
     /**
      * Save a seccionD.
      *
@@ -21,13 +18,20 @@ public interface SeccionDService {
     SeccionD save(SeccionD seccionD);
 
     /**
+     * Partially updates a seccionD.
+     *
+     * @param seccionD the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<SeccionD> partialUpdate(SeccionD seccionD);
+
+    /**
      * Get all the seccionDS.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     Page<SeccionD> findAll(Pageable pageable);
-
 
     /**
      * Get the "id" seccionD.

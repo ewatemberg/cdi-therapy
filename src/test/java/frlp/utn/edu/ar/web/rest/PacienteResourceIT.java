@@ -1,37 +1,37 @@
 package frlp.utn.edu.ar.web.rest;
 
-import frlp.utn.edu.ar.CdiApp;
-import frlp.utn.edu.ar.domain.Paciente;
-import frlp.utn.edu.ar.repository.PacienteRepository;
-import frlp.utn.edu.ar.service.PacienteService;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
-import javax.persistence.EntityManager;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
-
+import static frlp.utn.edu.ar.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import frlp.utn.edu.ar.IntegrationTest;
+import frlp.utn.edu.ar.domain.Paciente;
+import frlp.utn.edu.ar.repository.PacienteRepository;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Integration tests for the {@link PacienteResource} REST controller.
  */
-@SpringBootTest(classes = CdiApp.class)
+@IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-public class PacienteResourceIT {
+class PacienteResourceIT {
 
     private static final String DEFAULT_NOMBRES = "AAAAAAAAAA";
     private static final String UPDATED_NOMBRES = "BBBBBBBBBB";
@@ -99,11 +99,14 @@ public class PacienteResourceIT {
     private static final String DEFAULT_LUGAR_ORIGEN_PADRE = "AAAAAAAAAA";
     private static final String UPDATED_LUGAR_ORIGEN_PADRE = "BBBBBBBBBB";
 
-    @Autowired
-    private PacienteRepository pacienteRepository;
+    private static final String ENTITY_API_URL = "/api/pacientes";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
-    private PacienteService pacienteService;
+    private PacienteRepository pacienteRepository;
 
     @Autowired
     private EntityManager em;
@@ -145,6 +148,7 @@ public class PacienteResourceIT {
             .lugarOrigenPadre(DEFAULT_LUGAR_ORIGEN_PADRE);
         return paciente;
     }
+
     /**
      * Create an updated entity for this test.
      *
@@ -185,12 +189,11 @@ public class PacienteResourceIT {
 
     @Test
     @Transactional
-    public void createPaciente() throws Exception {
+    void createPaciente() throws Exception {
         int databaseSizeBeforeCreate = pacienteRepository.findAll().size();
         // Create the Paciente
-        restPacienteMockMvc.perform(post("/api/pacientes")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(paciente)))
+        restPacienteMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paciente)))
             .andExpect(status().isCreated());
 
         // Validate the Paciente in the database
@@ -204,14 +207,14 @@ public class PacienteResourceIT {
         assertThat(testPaciente.getFechaNacimiento()).isEqualTo(DEFAULT_FECHA_NACIMIENTO);
         assertThat(testPaciente.getLugarNacimiento()).isEqualTo(DEFAULT_LUGAR_NACIMIENTO);
         assertThat(testPaciente.getGenero()).isEqualTo(DEFAULT_GENERO);
-        assertThat(testPaciente.isNacioAntes9Meses()).isEqualTo(DEFAULT_NACIO_ANTES_9_MESES);
+        assertThat(testPaciente.getNacioAntes9Meses()).isEqualTo(DEFAULT_NACIO_ANTES_9_MESES);
         assertThat(testPaciente.getSemanasGestacion()).isEqualTo(DEFAULT_SEMANAS_GESTACION);
-        assertThat(testPaciente.getPesoAlNacer()).isEqualTo(DEFAULT_PESO_AL_NACER);
-        assertThat(testPaciente.isEnfermedadAuditivaLenguaje()).isEqualTo(DEFAULT_ENFERMEDAD_AUDITIVA_LENGUAJE);
+        assertThat(testPaciente.getPesoAlNacer()).isEqualByComparingTo(DEFAULT_PESO_AL_NACER);
+        assertThat(testPaciente.getEnfermedadAuditivaLenguaje()).isEqualTo(DEFAULT_ENFERMEDAD_AUDITIVA_LENGUAJE);
         assertThat(testPaciente.getDescripcionProblemaAuditivoLenguaje()).isEqualTo(DEFAULT_DESCRIPCION_PROBLEMA_AUDITIVO_LENGUAJE);
-        assertThat(testPaciente.isInfeccionesOido()).isEqualTo(DEFAULT_INFECCIONES_OIDO);
+        assertThat(testPaciente.getInfeccionesOido()).isEqualTo(DEFAULT_INFECCIONES_OIDO);
         assertThat(testPaciente.getTotalInfeccionesAnual()).isEqualTo(DEFAULT_TOTAL_INFECCIONES_ANUAL);
-        assertThat(testPaciente.isProblemaSalud()).isEqualTo(DEFAULT_PROBLEMA_SALUD);
+        assertThat(testPaciente.getProblemaSalud()).isEqualTo(DEFAULT_PROBLEMA_SALUD);
         assertThat(testPaciente.getDescripcionProblemaSalud()).isEqualTo(DEFAULT_DESCRIPCION_PROBLEMA_SALUD);
         assertThat(testPaciente.getNombreMadre()).isEqualTo(DEFAULT_NOMBRE_MADRE);
         assertThat(testPaciente.getEdadMadre()).isEqualTo(DEFAULT_EDAD_MADRE);
@@ -223,16 +226,15 @@ public class PacienteResourceIT {
 
     @Test
     @Transactional
-    public void createPacienteWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = pacienteRepository.findAll().size();
-
+    void createPacienteWithExistingId() throws Exception {
         // Create the Paciente with an existing ID
         paciente.setId(1L);
 
+        int databaseSizeBeforeCreate = pacienteRepository.findAll().size();
+
         // An entity with an existing ID cannot be created, so this API call must fail
-        restPacienteMockMvc.perform(post("/api/pacientes")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(paciente)))
+        restPacienteMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paciente)))
             .andExpect(status().isBadRequest());
 
         // Validate the Paciente in the database
@@ -240,15 +242,15 @@ public class PacienteResourceIT {
         assertThat(pacienteList).hasSize(databaseSizeBeforeCreate);
     }
 
-
     @Test
     @Transactional
-    public void getAllPacientes() throws Exception {
+    void getAllPacientes() throws Exception {
         // Initialize the database
         pacienteRepository.saveAndFlush(paciente);
 
         // Get all the pacienteList
-        restPacienteMockMvc.perform(get("/api/pacientes?sort=id,desc"))
+        restPacienteMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paciente.getId().intValue())))
@@ -261,7 +263,7 @@ public class PacienteResourceIT {
             .andExpect(jsonPath("$.[*].genero").value(hasItem(DEFAULT_GENERO)))
             .andExpect(jsonPath("$.[*].nacioAntes9Meses").value(hasItem(DEFAULT_NACIO_ANTES_9_MESES.booleanValue())))
             .andExpect(jsonPath("$.[*].semanasGestacion").value(hasItem(DEFAULT_SEMANAS_GESTACION)))
-            .andExpect(jsonPath("$.[*].pesoAlNacer").value(hasItem(DEFAULT_PESO_AL_NACER.intValue())))
+            .andExpect(jsonPath("$.[*].pesoAlNacer").value(hasItem(sameNumber(DEFAULT_PESO_AL_NACER))))
             .andExpect(jsonPath("$.[*].enfermedadAuditivaLenguaje").value(hasItem(DEFAULT_ENFERMEDAD_AUDITIVA_LENGUAJE.booleanValue())))
             .andExpect(jsonPath("$.[*].descripcionProblemaAuditivoLenguaje").value(hasItem(DEFAULT_DESCRIPCION_PROBLEMA_AUDITIVO_LENGUAJE)))
             .andExpect(jsonPath("$.[*].infeccionesOido").value(hasItem(DEFAULT_INFECCIONES_OIDO.booleanValue())))
@@ -275,15 +277,16 @@ public class PacienteResourceIT {
             .andExpect(jsonPath("$.[*].edadPadre").value(hasItem(DEFAULT_EDAD_PADRE)))
             .andExpect(jsonPath("$.[*].lugarOrigenPadre").value(hasItem(DEFAULT_LUGAR_ORIGEN_PADRE)));
     }
-    
+
     @Test
     @Transactional
-    public void getPaciente() throws Exception {
+    void getPaciente() throws Exception {
         // Initialize the database
         pacienteRepository.saveAndFlush(paciente);
 
         // Get the paciente
-        restPacienteMockMvc.perform(get("/api/pacientes/{id}", paciente.getId()))
+        restPacienteMockMvc
+            .perform(get(ENTITY_API_URL_ID, paciente.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(paciente.getId().intValue()))
@@ -296,7 +299,7 @@ public class PacienteResourceIT {
             .andExpect(jsonPath("$.genero").value(DEFAULT_GENERO))
             .andExpect(jsonPath("$.nacioAntes9Meses").value(DEFAULT_NACIO_ANTES_9_MESES.booleanValue()))
             .andExpect(jsonPath("$.semanasGestacion").value(DEFAULT_SEMANAS_GESTACION))
-            .andExpect(jsonPath("$.pesoAlNacer").value(DEFAULT_PESO_AL_NACER.intValue()))
+            .andExpect(jsonPath("$.pesoAlNacer").value(sameNumber(DEFAULT_PESO_AL_NACER)))
             .andExpect(jsonPath("$.enfermedadAuditivaLenguaje").value(DEFAULT_ENFERMEDAD_AUDITIVA_LENGUAJE.booleanValue()))
             .andExpect(jsonPath("$.descripcionProblemaAuditivoLenguaje").value(DEFAULT_DESCRIPCION_PROBLEMA_AUDITIVO_LENGUAJE))
             .andExpect(jsonPath("$.infeccionesOido").value(DEFAULT_INFECCIONES_OIDO.booleanValue()))
@@ -310,19 +313,19 @@ public class PacienteResourceIT {
             .andExpect(jsonPath("$.edadPadre").value(DEFAULT_EDAD_PADRE))
             .andExpect(jsonPath("$.lugarOrigenPadre").value(DEFAULT_LUGAR_ORIGEN_PADRE));
     }
+
     @Test
     @Transactional
-    public void getNonExistingPaciente() throws Exception {
+    void getNonExistingPaciente() throws Exception {
         // Get the paciente
-        restPacienteMockMvc.perform(get("/api/pacientes/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+        restPacienteMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updatePaciente() throws Exception {
+    void putNewPaciente() throws Exception {
         // Initialize the database
-        pacienteService.save(paciente);
+        pacienteRepository.saveAndFlush(paciente);
 
         int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
 
@@ -354,9 +357,12 @@ public class PacienteResourceIT {
             .edadPadre(UPDATED_EDAD_PADRE)
             .lugarOrigenPadre(UPDATED_LUGAR_ORIGEN_PADRE);
 
-        restPacienteMockMvc.perform(put("/api/pacientes")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedPaciente)))
+        restPacienteMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, updatedPaciente.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(updatedPaciente))
+            )
             .andExpect(status().isOk());
 
         // Validate the Paciente in the database
@@ -370,14 +376,14 @@ public class PacienteResourceIT {
         assertThat(testPaciente.getFechaNacimiento()).isEqualTo(UPDATED_FECHA_NACIMIENTO);
         assertThat(testPaciente.getLugarNacimiento()).isEqualTo(UPDATED_LUGAR_NACIMIENTO);
         assertThat(testPaciente.getGenero()).isEqualTo(UPDATED_GENERO);
-        assertThat(testPaciente.isNacioAntes9Meses()).isEqualTo(UPDATED_NACIO_ANTES_9_MESES);
+        assertThat(testPaciente.getNacioAntes9Meses()).isEqualTo(UPDATED_NACIO_ANTES_9_MESES);
         assertThat(testPaciente.getSemanasGestacion()).isEqualTo(UPDATED_SEMANAS_GESTACION);
         assertThat(testPaciente.getPesoAlNacer()).isEqualTo(UPDATED_PESO_AL_NACER);
-        assertThat(testPaciente.isEnfermedadAuditivaLenguaje()).isEqualTo(UPDATED_ENFERMEDAD_AUDITIVA_LENGUAJE);
+        assertThat(testPaciente.getEnfermedadAuditivaLenguaje()).isEqualTo(UPDATED_ENFERMEDAD_AUDITIVA_LENGUAJE);
         assertThat(testPaciente.getDescripcionProblemaAuditivoLenguaje()).isEqualTo(UPDATED_DESCRIPCION_PROBLEMA_AUDITIVO_LENGUAJE);
-        assertThat(testPaciente.isInfeccionesOido()).isEqualTo(UPDATED_INFECCIONES_OIDO);
+        assertThat(testPaciente.getInfeccionesOido()).isEqualTo(UPDATED_INFECCIONES_OIDO);
         assertThat(testPaciente.getTotalInfeccionesAnual()).isEqualTo(UPDATED_TOTAL_INFECCIONES_ANUAL);
-        assertThat(testPaciente.isProblemaSalud()).isEqualTo(UPDATED_PROBLEMA_SALUD);
+        assertThat(testPaciente.getProblemaSalud()).isEqualTo(UPDATED_PROBLEMA_SALUD);
         assertThat(testPaciente.getDescripcionProblemaSalud()).isEqualTo(UPDATED_DESCRIPCION_PROBLEMA_SALUD);
         assertThat(testPaciente.getNombreMadre()).isEqualTo(UPDATED_NOMBRE_MADRE);
         assertThat(testPaciente.getEdadMadre()).isEqualTo(UPDATED_EDAD_MADRE);
@@ -389,13 +395,17 @@ public class PacienteResourceIT {
 
     @Test
     @Transactional
-    public void updateNonExistingPaciente() throws Exception {
+    void putNonExistingPaciente() throws Exception {
         int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+        paciente.setId(count.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restPacienteMockMvc.perform(put("/api/pacientes")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(paciente)))
+        restPacienteMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, paciente.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(paciente))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the Paciente in the database
@@ -405,15 +415,241 @@ public class PacienteResourceIT {
 
     @Test
     @Transactional
-    public void deletePaciente() throws Exception {
+    void putWithIdMismatchPaciente() throws Exception {
+        int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+        paciente.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPacienteMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(paciente))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Paciente in the database
+        List<Paciente> pacienteList = pacienteRepository.findAll();
+        assertThat(pacienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void putWithMissingIdPathParamPaciente() throws Exception {
+        int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+        paciente.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPacienteMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paciente)))
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Paciente in the database
+        List<Paciente> pacienteList = pacienteRepository.findAll();
+        assertThat(pacienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void partialUpdatePacienteWithPatch() throws Exception {
         // Initialize the database
-        pacienteService.save(paciente);
+        pacienteRepository.saveAndFlush(paciente);
+
+        int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+
+        // Update the paciente using partial update
+        Paciente partialUpdatedPaciente = new Paciente();
+        partialUpdatedPaciente.setId(paciente.getId());
+
+        partialUpdatedPaciente
+            .apellidos(UPDATED_APELLIDOS)
+            .obraSocial(UPDATED_OBRA_SOCIAL)
+            .genero(UPDATED_GENERO)
+            .nacioAntes9Meses(UPDATED_NACIO_ANTES_9_MESES)
+            .pesoAlNacer(UPDATED_PESO_AL_NACER)
+            .infeccionesOido(UPDATED_INFECCIONES_OIDO)
+            .totalInfeccionesAnual(UPDATED_TOTAL_INFECCIONES_ANUAL)
+            .descripcionProblemaSalud(UPDATED_DESCRIPCION_PROBLEMA_SALUD)
+            .nombreMadre(UPDATED_NOMBRE_MADRE)
+            .lugarOrigenMadre(UPDATED_LUGAR_ORIGEN_MADRE)
+            .edadPadre(UPDATED_EDAD_PADRE)
+            .lugarOrigenPadre(UPDATED_LUGAR_ORIGEN_PADRE);
+
+        restPacienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedPaciente.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPaciente))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Paciente in the database
+        List<Paciente> pacienteList = pacienteRepository.findAll();
+        assertThat(pacienteList).hasSize(databaseSizeBeforeUpdate);
+        Paciente testPaciente = pacienteList.get(pacienteList.size() - 1);
+        assertThat(testPaciente.getNombres()).isEqualTo(DEFAULT_NOMBRES);
+        assertThat(testPaciente.getApellidos()).isEqualTo(UPDATED_APELLIDOS);
+        assertThat(testPaciente.getObraSocial()).isEqualTo(UPDATED_OBRA_SOCIAL);
+        assertThat(testPaciente.getDni()).isEqualTo(DEFAULT_DNI);
+        assertThat(testPaciente.getFechaNacimiento()).isEqualTo(DEFAULT_FECHA_NACIMIENTO);
+        assertThat(testPaciente.getLugarNacimiento()).isEqualTo(DEFAULT_LUGAR_NACIMIENTO);
+        assertThat(testPaciente.getGenero()).isEqualTo(UPDATED_GENERO);
+        assertThat(testPaciente.getNacioAntes9Meses()).isEqualTo(UPDATED_NACIO_ANTES_9_MESES);
+        assertThat(testPaciente.getSemanasGestacion()).isEqualTo(DEFAULT_SEMANAS_GESTACION);
+        assertThat(testPaciente.getPesoAlNacer()).isEqualByComparingTo(UPDATED_PESO_AL_NACER);
+        assertThat(testPaciente.getEnfermedadAuditivaLenguaje()).isEqualTo(DEFAULT_ENFERMEDAD_AUDITIVA_LENGUAJE);
+        assertThat(testPaciente.getDescripcionProblemaAuditivoLenguaje()).isEqualTo(DEFAULT_DESCRIPCION_PROBLEMA_AUDITIVO_LENGUAJE);
+        assertThat(testPaciente.getInfeccionesOido()).isEqualTo(UPDATED_INFECCIONES_OIDO);
+        assertThat(testPaciente.getTotalInfeccionesAnual()).isEqualTo(UPDATED_TOTAL_INFECCIONES_ANUAL);
+        assertThat(testPaciente.getProblemaSalud()).isEqualTo(DEFAULT_PROBLEMA_SALUD);
+        assertThat(testPaciente.getDescripcionProblemaSalud()).isEqualTo(UPDATED_DESCRIPCION_PROBLEMA_SALUD);
+        assertThat(testPaciente.getNombreMadre()).isEqualTo(UPDATED_NOMBRE_MADRE);
+        assertThat(testPaciente.getEdadMadre()).isEqualTo(DEFAULT_EDAD_MADRE);
+        assertThat(testPaciente.getLugarOrigenMadre()).isEqualTo(UPDATED_LUGAR_ORIGEN_MADRE);
+        assertThat(testPaciente.getNombrePadre()).isEqualTo(DEFAULT_NOMBRE_PADRE);
+        assertThat(testPaciente.getEdadPadre()).isEqualTo(UPDATED_EDAD_PADRE);
+        assertThat(testPaciente.getLugarOrigenPadre()).isEqualTo(UPDATED_LUGAR_ORIGEN_PADRE);
+    }
+
+    @Test
+    @Transactional
+    void fullUpdatePacienteWithPatch() throws Exception {
+        // Initialize the database
+        pacienteRepository.saveAndFlush(paciente);
+
+        int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+
+        // Update the paciente using partial update
+        Paciente partialUpdatedPaciente = new Paciente();
+        partialUpdatedPaciente.setId(paciente.getId());
+
+        partialUpdatedPaciente
+            .nombres(UPDATED_NOMBRES)
+            .apellidos(UPDATED_APELLIDOS)
+            .obraSocial(UPDATED_OBRA_SOCIAL)
+            .dni(UPDATED_DNI)
+            .fechaNacimiento(UPDATED_FECHA_NACIMIENTO)
+            .lugarNacimiento(UPDATED_LUGAR_NACIMIENTO)
+            .genero(UPDATED_GENERO)
+            .nacioAntes9Meses(UPDATED_NACIO_ANTES_9_MESES)
+            .semanasGestacion(UPDATED_SEMANAS_GESTACION)
+            .pesoAlNacer(UPDATED_PESO_AL_NACER)
+            .enfermedadAuditivaLenguaje(UPDATED_ENFERMEDAD_AUDITIVA_LENGUAJE)
+            .descripcionProblemaAuditivoLenguaje(UPDATED_DESCRIPCION_PROBLEMA_AUDITIVO_LENGUAJE)
+            .infeccionesOido(UPDATED_INFECCIONES_OIDO)
+            .totalInfeccionesAnual(UPDATED_TOTAL_INFECCIONES_ANUAL)
+            .problemaSalud(UPDATED_PROBLEMA_SALUD)
+            .descripcionProblemaSalud(UPDATED_DESCRIPCION_PROBLEMA_SALUD)
+            .nombreMadre(UPDATED_NOMBRE_MADRE)
+            .edadMadre(UPDATED_EDAD_MADRE)
+            .lugarOrigenMadre(UPDATED_LUGAR_ORIGEN_MADRE)
+            .nombrePadre(UPDATED_NOMBRE_PADRE)
+            .edadPadre(UPDATED_EDAD_PADRE)
+            .lugarOrigenPadre(UPDATED_LUGAR_ORIGEN_PADRE);
+
+        restPacienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedPaciente.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPaciente))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Paciente in the database
+        List<Paciente> pacienteList = pacienteRepository.findAll();
+        assertThat(pacienteList).hasSize(databaseSizeBeforeUpdate);
+        Paciente testPaciente = pacienteList.get(pacienteList.size() - 1);
+        assertThat(testPaciente.getNombres()).isEqualTo(UPDATED_NOMBRES);
+        assertThat(testPaciente.getApellidos()).isEqualTo(UPDATED_APELLIDOS);
+        assertThat(testPaciente.getObraSocial()).isEqualTo(UPDATED_OBRA_SOCIAL);
+        assertThat(testPaciente.getDni()).isEqualTo(UPDATED_DNI);
+        assertThat(testPaciente.getFechaNacimiento()).isEqualTo(UPDATED_FECHA_NACIMIENTO);
+        assertThat(testPaciente.getLugarNacimiento()).isEqualTo(UPDATED_LUGAR_NACIMIENTO);
+        assertThat(testPaciente.getGenero()).isEqualTo(UPDATED_GENERO);
+        assertThat(testPaciente.getNacioAntes9Meses()).isEqualTo(UPDATED_NACIO_ANTES_9_MESES);
+        assertThat(testPaciente.getSemanasGestacion()).isEqualTo(UPDATED_SEMANAS_GESTACION);
+        assertThat(testPaciente.getPesoAlNacer()).isEqualByComparingTo(UPDATED_PESO_AL_NACER);
+        assertThat(testPaciente.getEnfermedadAuditivaLenguaje()).isEqualTo(UPDATED_ENFERMEDAD_AUDITIVA_LENGUAJE);
+        assertThat(testPaciente.getDescripcionProblemaAuditivoLenguaje()).isEqualTo(UPDATED_DESCRIPCION_PROBLEMA_AUDITIVO_LENGUAJE);
+        assertThat(testPaciente.getInfeccionesOido()).isEqualTo(UPDATED_INFECCIONES_OIDO);
+        assertThat(testPaciente.getTotalInfeccionesAnual()).isEqualTo(UPDATED_TOTAL_INFECCIONES_ANUAL);
+        assertThat(testPaciente.getProblemaSalud()).isEqualTo(UPDATED_PROBLEMA_SALUD);
+        assertThat(testPaciente.getDescripcionProblemaSalud()).isEqualTo(UPDATED_DESCRIPCION_PROBLEMA_SALUD);
+        assertThat(testPaciente.getNombreMadre()).isEqualTo(UPDATED_NOMBRE_MADRE);
+        assertThat(testPaciente.getEdadMadre()).isEqualTo(UPDATED_EDAD_MADRE);
+        assertThat(testPaciente.getLugarOrigenMadre()).isEqualTo(UPDATED_LUGAR_ORIGEN_MADRE);
+        assertThat(testPaciente.getNombrePadre()).isEqualTo(UPDATED_NOMBRE_PADRE);
+        assertThat(testPaciente.getEdadPadre()).isEqualTo(UPDATED_EDAD_PADRE);
+        assertThat(testPaciente.getLugarOrigenPadre()).isEqualTo(UPDATED_LUGAR_ORIGEN_PADRE);
+    }
+
+    @Test
+    @Transactional
+    void patchNonExistingPaciente() throws Exception {
+        int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+        paciente.setId(count.incrementAndGet());
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restPacienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, paciente.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(paciente))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Paciente in the database
+        List<Paciente> pacienteList = pacienteRepository.findAll();
+        assertThat(pacienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithIdMismatchPaciente() throws Exception {
+        int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+        paciente.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPacienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(paciente))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Paciente in the database
+        List<Paciente> pacienteList = pacienteRepository.findAll();
+        assertThat(pacienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithMissingIdPathParamPaciente() throws Exception {
+        int databaseSizeBeforeUpdate = pacienteRepository.findAll().size();
+        paciente.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPacienteMockMvc
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(paciente)))
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Paciente in the database
+        List<Paciente> pacienteList = pacienteRepository.findAll();
+        assertThat(pacienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void deletePaciente() throws Exception {
+        // Initialize the database
+        pacienteRepository.saveAndFlush(paciente);
 
         int databaseSizeBeforeDelete = pacienteRepository.findAll().size();
 
         // Delete the paciente
-        restPacienteMockMvc.perform(delete("/api/pacientes/{id}", paciente.getId())
-            .accept(MediaType.APPLICATION_JSON))
+        restPacienteMockMvc
+            .perform(delete(ENTITY_API_URL_ID, paciente.getId()).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

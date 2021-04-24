@@ -1,12 +1,10 @@
 package frlp.utn.edu.ar.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
 
 /**
  * A Cuestionario.
@@ -22,19 +20,23 @@ public class Cuestionario implements Serializable {
     private Long id;
 
     @OneToMany(mappedBy = "cuestionario")
+    @JsonIgnoreProperties(value = { "cuestionario", "vocabulario" }, allowSetters = true)
     private Set<SeccionA> seccionAS = new HashSet<>();
 
     @OneToMany(mappedBy = "cuestionario")
+    @JsonIgnoreProperties(value = { "cuestionario", "usoLenguaje" }, allowSetters = true)
     private Set<SeccionB> seccionBS = new HashSet<>();
 
     @OneToMany(mappedBy = "cuestionario")
+    @JsonIgnoreProperties(value = { "cuestionario", "formaVerbal" }, allowSetters = true)
     private Set<SeccionC> seccionCS = new HashSet<>();
 
     @OneToMany(mappedBy = "cuestionario")
+    @JsonIgnoreProperties(value = { "cuestionario", "fraseCompleja" }, allowSetters = true)
     private Set<SeccionD> seccionDS = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "cuestionarios", allowSetters = true)
+    @JsonIgnoreProperties(value = { "cuestionarios" }, allowSetters = true)
     private Paciente paciente;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -46,12 +48,17 @@ public class Cuestionario implements Serializable {
         this.id = id;
     }
 
+    public Cuestionario id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public Set<SeccionA> getSeccionAS() {
-        return seccionAS;
+        return this.seccionAS;
     }
 
     public Cuestionario seccionAS(Set<SeccionA> seccionAS) {
-        this.seccionAS = seccionAS;
+        this.setSeccionAS(seccionAS);
         return this;
     }
 
@@ -68,15 +75,21 @@ public class Cuestionario implements Serializable {
     }
 
     public void setSeccionAS(Set<SeccionA> seccionAS) {
+        if (this.seccionAS != null) {
+            this.seccionAS.forEach(i -> i.setCuestionario(null));
+        }
+        if (seccionAS != null) {
+            seccionAS.forEach(i -> i.setCuestionario(this));
+        }
         this.seccionAS = seccionAS;
     }
 
     public Set<SeccionB> getSeccionBS() {
-        return seccionBS;
+        return this.seccionBS;
     }
 
     public Cuestionario seccionBS(Set<SeccionB> seccionBS) {
-        this.seccionBS = seccionBS;
+        this.setSeccionBS(seccionBS);
         return this;
     }
 
@@ -93,15 +106,21 @@ public class Cuestionario implements Serializable {
     }
 
     public void setSeccionBS(Set<SeccionB> seccionBS) {
+        if (this.seccionBS != null) {
+            this.seccionBS.forEach(i -> i.setCuestionario(null));
+        }
+        if (seccionBS != null) {
+            seccionBS.forEach(i -> i.setCuestionario(this));
+        }
         this.seccionBS = seccionBS;
     }
 
     public Set<SeccionC> getSeccionCS() {
-        return seccionCS;
+        return this.seccionCS;
     }
 
     public Cuestionario seccionCS(Set<SeccionC> seccionCS) {
-        this.seccionCS = seccionCS;
+        this.setSeccionCS(seccionCS);
         return this;
     }
 
@@ -118,15 +137,21 @@ public class Cuestionario implements Serializable {
     }
 
     public void setSeccionCS(Set<SeccionC> seccionCS) {
+        if (this.seccionCS != null) {
+            this.seccionCS.forEach(i -> i.setCuestionario(null));
+        }
+        if (seccionCS != null) {
+            seccionCS.forEach(i -> i.setCuestionario(this));
+        }
         this.seccionCS = seccionCS;
     }
 
     public Set<SeccionD> getSeccionDS() {
-        return seccionDS;
+        return this.seccionDS;
     }
 
     public Cuestionario seccionDS(Set<SeccionD> seccionDS) {
-        this.seccionDS = seccionDS;
+        this.setSeccionDS(seccionDS);
         return this;
     }
 
@@ -143,21 +168,28 @@ public class Cuestionario implements Serializable {
     }
 
     public void setSeccionDS(Set<SeccionD> seccionDS) {
+        if (this.seccionDS != null) {
+            this.seccionDS.forEach(i -> i.setCuestionario(null));
+        }
+        if (seccionDS != null) {
+            seccionDS.forEach(i -> i.setCuestionario(this));
+        }
         this.seccionDS = seccionDS;
     }
 
     public Paciente getPaciente() {
-        return paciente;
+        return this.paciente;
     }
 
     public Cuestionario paciente(Paciente paciente) {
-        this.paciente = paciente;
+        this.setPaciente(paciente);
         return this;
     }
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -173,7 +205,8 @@ public class Cuestionario implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

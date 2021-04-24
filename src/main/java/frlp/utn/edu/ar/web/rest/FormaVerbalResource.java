@@ -1,21 +1,21 @@
 package frlp.utn.edu.ar.web.rest;
 
 import frlp.utn.edu.ar.domain.FormaVerbal;
+import frlp.utn.edu.ar.repository.FormaVerbalRepository;
 import frlp.utn.edu.ar.service.FormaVerbalService;
 import frlp.utn.edu.ar.web.rest.errors.BadRequestAlertException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link frlp.utn.edu.ar.domain.FormaVerbal}.
@@ -33,8 +33,11 @@ public class FormaVerbalResource {
 
     private final FormaVerbalService formaVerbalService;
 
-    public FormaVerbalResource(FormaVerbalService formaVerbalService) {
+    private final FormaVerbalRepository formaVerbalRepository;
+
+    public FormaVerbalResource(FormaVerbalService formaVerbalService, FormaVerbalRepository formaVerbalRepository) {
         this.formaVerbalService = formaVerbalService;
+        this.formaVerbalRepository = formaVerbalRepository;
     }
 
     /**
@@ -51,30 +54,80 @@ public class FormaVerbalResource {
             throw new BadRequestAlertException("A new formaVerbal cannot already have an ID", ENTITY_NAME, "idexists");
         }
         FormaVerbal result = formaVerbalService.save(formaVerbal);
-        return ResponseEntity.created(new URI("/api/forma-verbals/" + result.getId()))
+        return ResponseEntity
+            .created(new URI("/api/forma-verbals/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /forma-verbals} : Updates an existing formaVerbal.
+     * {@code PUT  /forma-verbals/:id} : Updates an existing formaVerbal.
      *
+     * @param id the id of the formaVerbal to save.
      * @param formaVerbal the formaVerbal to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated formaVerbal,
      * or with status {@code 400 (Bad Request)} if the formaVerbal is not valid,
      * or with status {@code 500 (Internal Server Error)} if the formaVerbal couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/forma-verbals")
-    public ResponseEntity<FormaVerbal> updateFormaVerbal(@RequestBody FormaVerbal formaVerbal) throws URISyntaxException {
-        log.debug("REST request to update FormaVerbal : {}", formaVerbal);
+    @PutMapping("/forma-verbals/{id}")
+    public ResponseEntity<FormaVerbal> updateFormaVerbal(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody FormaVerbal formaVerbal
+    ) throws URISyntaxException {
+        log.debug("REST request to update FormaVerbal : {}, {}", id, formaVerbal);
         if (formaVerbal.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!Objects.equals(id, formaVerbal.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!formaVerbalRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         FormaVerbal result = formaVerbalService.save(formaVerbal);
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, formaVerbal.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code PATCH  /forma-verbals/:id} : Partial updates given fields of an existing formaVerbal, field will ignore if it is null
+     *
+     * @param id the id of the formaVerbal to save.
+     * @param formaVerbal the formaVerbal to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated formaVerbal,
+     * or with status {@code 400 (Bad Request)} if the formaVerbal is not valid,
+     * or with status {@code 404 (Not Found)} if the formaVerbal is not found,
+     * or with status {@code 500 (Internal Server Error)} if the formaVerbal couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/forma-verbals/{id}", consumes = "application/merge-patch+json")
+    public ResponseEntity<FormaVerbal> partialUpdateFormaVerbal(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody FormaVerbal formaVerbal
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update FormaVerbal partially : {}, {}", id, formaVerbal);
+        if (formaVerbal.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, formaVerbal.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!formaVerbalRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<FormaVerbal> result = formaVerbalService.partialUpdate(formaVerbal);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, formaVerbal.getId().toString())
+        );
     }
 
     /**
@@ -111,6 +164,9 @@ public class FormaVerbalResource {
     public ResponseEntity<Void> deleteFormaVerbal(@PathVariable Long id) {
         log.debug("REST request to delete FormaVerbal : {}", id);
         formaVerbalService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

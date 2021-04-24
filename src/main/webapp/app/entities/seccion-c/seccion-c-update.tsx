@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { ICuestionario } from 'app/shared/model/cuestionario.model';
 import { getEntities as getCuestionarios } from 'app/entities/cuestionario/cuestionario.reducer';
+import { IFormaVerbal } from 'app/shared/model/forma-verbal.model';
+import { getEntities as getFormaVerbals } from 'app/entities/forma-verbal/forma-verbal.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './seccion-c.reducer';
 import { ISeccionC } from 'app/shared/model/seccion-c.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +19,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ISeccionCUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const SeccionCUpdate = (props: ISeccionCUpdateProps) => {
-  const [cuestionarioId, setCuestionarioId] = useState('0');
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { seccionCEntity, cuestionarios, loading, updating } = props;
+  const { seccionCEntity, cuestionarios, formaVerbals, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/seccion-c' + props.location.search);
@@ -34,6 +35,7 @@ export const SeccionCUpdate = (props: ISeccionCUpdateProps) => {
     }
 
     props.getCuestionarios();
+    props.getFormaVerbals();
   }, []);
 
   useEffect(() => {
@@ -47,6 +49,8 @@ export const SeccionCUpdate = (props: ISeccionCUpdateProps) => {
       const entity = {
         ...seccionCEntity,
         ...values,
+        cuestionario: cuestionarios.find(it => it.id.toString() === values.cuestionarioId.toString()),
+        formaVerbal: formaVerbals.find(it => it.id.toString() === values.formaVerbalId.toString()),
       };
 
       if (isNew) {
@@ -61,7 +65,7 @@ export const SeccionCUpdate = (props: ISeccionCUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.seccionC.home.createOrEditLabel">
+          <h2 id="cdiApp.seccionC.home.createOrEditLabel" data-cy="SeccionCCreateUpdateHeading">
             <Translate contentKey="cdiApp.seccionC.home.createOrEditLabel">Create or edit a SeccionC</Translate>
           </h2>
         </Col>
@@ -84,22 +88,37 @@ export const SeccionCUpdate = (props: ISeccionCUpdateProps) => {
                 <Label id="descripcionLabel" for="seccion-c-descripcion">
                   <Translate contentKey="cdiApp.seccionC.descripcion">Descripcion</Translate>
                 </Label>
-                <AvField id="seccion-c-descripcion" type="text" name="descripcion" />
+                <AvField id="seccion-c-descripcion" data-cy="descripcion" type="text" name="descripcion" />
               </AvGroup>
               <AvGroup>
                 <Label id="valorLabel" for="seccion-c-valor">
                   <Translate contentKey="cdiApp.seccionC.valor">Valor</Translate>
                 </Label>
-                <AvField id="seccion-c-valor" type="string" className="form-control" name="valor" />
+                <AvField id="seccion-c-valor" data-cy="valor" type="string" className="form-control" name="valor" />
               </AvGroup>
               <AvGroup>
                 <Label for="seccion-c-cuestionario">
                   <Translate contentKey="cdiApp.seccionC.cuestionario">Cuestionario</Translate>
                 </Label>
-                <AvInput id="seccion-c-cuestionario" type="select" className="form-control" name="cuestionario.id">
+                <AvInput id="seccion-c-cuestionario" data-cy="cuestionario" type="select" className="form-control" name="cuestionarioId">
                   <option value="" key="0" />
                   {cuestionarios
                     ? cuestionarios.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
+              <AvGroup>
+                <Label for="seccion-c-formaVerbal">
+                  <Translate contentKey="cdiApp.seccionC.formaVerbal">Forma Verbal</Translate>
+                </Label>
+                <AvInput id="seccion-c-formaVerbal" data-cy="formaVerbal" type="select" className="form-control" name="formaVerbalId">
+                  <option value="" key="0" />
+                  {formaVerbals
+                    ? formaVerbals.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
                           {otherEntity.id}
                         </option>
@@ -115,7 +134,7 @@ export const SeccionCUpdate = (props: ISeccionCUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -130,6 +149,7 @@ export const SeccionCUpdate = (props: ISeccionCUpdateProps) => {
 
 const mapStateToProps = (storeState: IRootState) => ({
   cuestionarios: storeState.cuestionario.entities,
+  formaVerbals: storeState.formaVerbal.entities,
   seccionCEntity: storeState.seccionC.entity,
   loading: storeState.seccionC.loading,
   updating: storeState.seccionC.updating,
@@ -138,6 +158,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getCuestionarios,
+  getFormaVerbals,
   getEntity,
   updateEntity,
   createEntity,

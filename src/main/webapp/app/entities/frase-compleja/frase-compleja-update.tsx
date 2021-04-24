@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ISeccionD } from 'app/shared/model/seccion-d.model';
-import { getEntities as getSeccionDs } from 'app/entities/seccion-d/seccion-d.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './frase-compleja.reducer';
 import { IFraseCompleja } from 'app/shared/model/frase-compleja.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +15,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IFraseComplejaUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const FraseComplejaUpdate = (props: IFraseComplejaUpdateProps) => {
-  const [seccionDId, setSeccionDId] = useState('0');
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { fraseComplejaEntity, seccionDS, loading, updating } = props;
+  const { fraseComplejaEntity, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/frase-compleja');
@@ -32,8 +29,6 @@ export const FraseComplejaUpdate = (props: IFraseComplejaUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
-
-    props.getSeccionDs();
   }, []);
 
   useEffect(() => {
@@ -61,7 +56,7 @@ export const FraseComplejaUpdate = (props: IFraseComplejaUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.fraseCompleja.home.createOrEditLabel">
+          <h2 id="cdiApp.fraseCompleja.home.createOrEditLabel" data-cy="FraseComplejaCreateUpdateHeading">
             <Translate contentKey="cdiApp.fraseCompleja.home.createOrEditLabel">Create or edit a FraseCompleja</Translate>
           </h2>
         </Col>
@@ -84,22 +79,7 @@ export const FraseComplejaUpdate = (props: IFraseComplejaUpdateProps) => {
                 <Label id="fraseLabel" for="frase-compleja-frase">
                   <Translate contentKey="cdiApp.fraseCompleja.frase">Frase</Translate>
                 </Label>
-                <AvField id="frase-compleja-frase" type="text" name="frase" />
-              </AvGroup>
-              <AvGroup>
-                <Label for="frase-compleja-seccionD">
-                  <Translate contentKey="cdiApp.fraseCompleja.seccionD">Seccion D</Translate>
-                </Label>
-                <AvInput id="frase-compleja-seccionD" type="select" className="form-control" name="seccionD.id">
-                  <option value="" key="0" />
-                  {seccionDS
-                    ? seccionDS.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
+                <AvField id="frase-compleja-frase" data-cy="frase" type="text" name="frase" />
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/frase-compleja" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
@@ -109,7 +89,7 @@ export const FraseComplejaUpdate = (props: IFraseComplejaUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -123,7 +103,6 @@ export const FraseComplejaUpdate = (props: IFraseComplejaUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  seccionDS: storeState.seccionD.entities,
   fraseComplejaEntity: storeState.fraseCompleja.entity,
   loading: storeState.fraseCompleja.loading,
   updating: storeState.fraseCompleja.updating,
@@ -131,7 +110,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSeccionDs,
   getEntity,
   updateEntity,
   createEntity,

@@ -6,11 +6,11 @@ import { IPaciente } from 'app/shared/model/paciente.model';
 
 export interface ICuestionario {
   id?: number;
-  seccionAS?: ISeccionA[];
-  seccionBS?: ISeccionB[];
-  seccionCS?: ISeccionC[];
-  seccionDS?: ISeccionD[];
-  paciente?: IPaciente;
+  seccionAS?: ISeccionA[] | null;
+  seccionBS?: ISeccionB[] | null;
+  seccionCS?: ISeccionC[] | null;
+  seccionDS?: ISeccionD[] | null;
+  paciente?: IPaciente | null;
 }
 
 export const defaultValue: Readonly<ICuestionario> = {};

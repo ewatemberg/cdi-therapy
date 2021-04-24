@@ -3,6 +3,7 @@
     "seccionD": {
       "home": {
         "title": "Seccion DS",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Seccion D",
         "createOrEditLabel": "Crear o editar Seccion D",
         "notFound": "Ningún Seccion DS encontrado"
@@ -16,9 +17,10 @@
       "detail": {
         "title": "Seccion D"
       },
+      "id": "ID",
       "valor": "Valor",
-      "fraseCompleja": "Frase Compleja",
-      "cuestionario": "Cuestionario"
+      "cuestionario": "Cuestionario",
+      "fraseCompleja": "Frase Compleja"
     }
   }
 }

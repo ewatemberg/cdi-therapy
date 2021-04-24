@@ -1,13 +1,12 @@
 package frlp.utn.edu.ar.domain;
 
-
-import javax.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
 
 /**
  * A Paciente.
@@ -89,6 +88,7 @@ public class Paciente implements Serializable {
     private String lugarOrigenPadre;
 
     @OneToMany(mappedBy = "paciente")
+    @JsonIgnoreProperties(value = { "seccionAS", "seccionBS", "seccionCS", "seccionDS", "paciente" }, allowSetters = true)
     private Set<Cuestionario> cuestionarios = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -100,8 +100,13 @@ public class Paciente implements Serializable {
         this.id = id;
     }
 
+    public Paciente id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getNombres() {
-        return nombres;
+        return this.nombres;
     }
 
     public Paciente nombres(String nombres) {
@@ -114,7 +119,7 @@ public class Paciente implements Serializable {
     }
 
     public String getApellidos() {
-        return apellidos;
+        return this.apellidos;
     }
 
     public Paciente apellidos(String apellidos) {
@@ -127,7 +132,7 @@ public class Paciente implements Serializable {
     }
 
     public String getObraSocial() {
-        return obraSocial;
+        return this.obraSocial;
     }
 
     public Paciente obraSocial(String obraSocial) {
@@ -140,7 +145,7 @@ public class Paciente implements Serializable {
     }
 
     public String getDni() {
-        return dni;
+        return this.dni;
     }
 
     public Paciente dni(String dni) {
@@ -153,7 +158,7 @@ public class Paciente implements Serializable {
     }
 
     public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
+        return this.fechaNacimiento;
     }
 
     public Paciente fechaNacimiento(LocalDate fechaNacimiento) {
@@ -166,7 +171,7 @@ public class Paciente implements Serializable {
     }
 
     public String getLugarNacimiento() {
-        return lugarNacimiento;
+        return this.lugarNacimiento;
     }
 
     public Paciente lugarNacimiento(String lugarNacimiento) {
@@ -179,7 +184,7 @@ public class Paciente implements Serializable {
     }
 
     public String getGenero() {
-        return genero;
+        return this.genero;
     }
 
     public Paciente genero(String genero) {
@@ -191,8 +196,8 @@ public class Paciente implements Serializable {
         this.genero = genero;
     }
 
-    public Boolean isNacioAntes9Meses() {
-        return nacioAntes9Meses;
+    public Boolean getNacioAntes9Meses() {
+        return this.nacioAntes9Meses;
     }
 
     public Paciente nacioAntes9Meses(Boolean nacioAntes9Meses) {
@@ -205,7 +210,7 @@ public class Paciente implements Serializable {
     }
 
     public Integer getSemanasGestacion() {
-        return semanasGestacion;
+        return this.semanasGestacion;
     }
 
     public Paciente semanasGestacion(Integer semanasGestacion) {
@@ -218,7 +223,7 @@ public class Paciente implements Serializable {
     }
 
     public BigDecimal getPesoAlNacer() {
-        return pesoAlNacer;
+        return this.pesoAlNacer;
     }
 
     public Paciente pesoAlNacer(BigDecimal pesoAlNacer) {
@@ -230,8 +235,8 @@ public class Paciente implements Serializable {
         this.pesoAlNacer = pesoAlNacer;
     }
 
-    public Boolean isEnfermedadAuditivaLenguaje() {
-        return enfermedadAuditivaLenguaje;
+    public Boolean getEnfermedadAuditivaLenguaje() {
+        return this.enfermedadAuditivaLenguaje;
     }
 
     public Paciente enfermedadAuditivaLenguaje(Boolean enfermedadAuditivaLenguaje) {
@@ -244,7 +249,7 @@ public class Paciente implements Serializable {
     }
 
     public String getDescripcionProblemaAuditivoLenguaje() {
-        return descripcionProblemaAuditivoLenguaje;
+        return this.descripcionProblemaAuditivoLenguaje;
     }
 
     public Paciente descripcionProblemaAuditivoLenguaje(String descripcionProblemaAuditivoLenguaje) {
@@ -256,8 +261,8 @@ public class Paciente implements Serializable {
         this.descripcionProblemaAuditivoLenguaje = descripcionProblemaAuditivoLenguaje;
     }
 
-    public Boolean isInfeccionesOido() {
-        return infeccionesOido;
+    public Boolean getInfeccionesOido() {
+        return this.infeccionesOido;
     }
 
     public Paciente infeccionesOido(Boolean infeccionesOido) {
@@ -270,7 +275,7 @@ public class Paciente implements Serializable {
     }
 
     public Integer getTotalInfeccionesAnual() {
-        return totalInfeccionesAnual;
+        return this.totalInfeccionesAnual;
     }
 
     public Paciente totalInfeccionesAnual(Integer totalInfeccionesAnual) {
@@ -282,8 +287,8 @@ public class Paciente implements Serializable {
         this.totalInfeccionesAnual = totalInfeccionesAnual;
     }
 
-    public Boolean isProblemaSalud() {
-        return problemaSalud;
+    public Boolean getProblemaSalud() {
+        return this.problemaSalud;
     }
 
     public Paciente problemaSalud(Boolean problemaSalud) {
@@ -296,7 +301,7 @@ public class Paciente implements Serializable {
     }
 
     public String getDescripcionProblemaSalud() {
-        return descripcionProblemaSalud;
+        return this.descripcionProblemaSalud;
     }
 
     public Paciente descripcionProblemaSalud(String descripcionProblemaSalud) {
@@ -309,7 +314,7 @@ public class Paciente implements Serializable {
     }
 
     public String getNombreMadre() {
-        return nombreMadre;
+        return this.nombreMadre;
     }
 
     public Paciente nombreMadre(String nombreMadre) {
@@ -322,7 +327,7 @@ public class Paciente implements Serializable {
     }
 
     public Integer getEdadMadre() {
-        return edadMadre;
+        return this.edadMadre;
     }
 
     public Paciente edadMadre(Integer edadMadre) {
@@ -335,7 +340,7 @@ public class Paciente implements Serializable {
     }
 
     public String getLugarOrigenMadre() {
-        return lugarOrigenMadre;
+        return this.lugarOrigenMadre;
     }
 
     public Paciente lugarOrigenMadre(String lugarOrigenMadre) {
@@ -348,7 +353,7 @@ public class Paciente implements Serializable {
     }
 
     public String getNombrePadre() {
-        return nombrePadre;
+        return this.nombrePadre;
     }
 
     public Paciente nombrePadre(String nombrePadre) {
@@ -361,7 +366,7 @@ public class Paciente implements Serializable {
     }
 
     public Integer getEdadPadre() {
-        return edadPadre;
+        return this.edadPadre;
     }
 
     public Paciente edadPadre(Integer edadPadre) {
@@ -374,7 +379,7 @@ public class Paciente implements Serializable {
     }
 
     public String getLugarOrigenPadre() {
-        return lugarOrigenPadre;
+        return this.lugarOrigenPadre;
     }
 
     public Paciente lugarOrigenPadre(String lugarOrigenPadre) {
@@ -387,11 +392,11 @@ public class Paciente implements Serializable {
     }
 
     public Set<Cuestionario> getCuestionarios() {
-        return cuestionarios;
+        return this.cuestionarios;
     }
 
     public Paciente cuestionarios(Set<Cuestionario> cuestionarios) {
-        this.cuestionarios = cuestionarios;
+        this.setCuestionarios(cuestionarios);
         return this;
     }
 
@@ -408,8 +413,15 @@ public class Paciente implements Serializable {
     }
 
     public void setCuestionarios(Set<Cuestionario> cuestionarios) {
+        if (this.cuestionarios != null) {
+            this.cuestionarios.forEach(i -> i.setPaciente(null));
+        }
+        if (cuestionarios != null) {
+            cuestionarios.forEach(i -> i.setPaciente(this));
+        }
         this.cuestionarios = cuestionarios;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -425,7 +437,8 @@ public class Paciente implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore
@@ -440,14 +453,14 @@ public class Paciente implements Serializable {
             ", fechaNacimiento='" + getFechaNacimiento() + "'" +
             ", lugarNacimiento='" + getLugarNacimiento() + "'" +
             ", genero='" + getGenero() + "'" +
-            ", nacioAntes9Meses='" + isNacioAntes9Meses() + "'" +
+            ", nacioAntes9Meses='" + getNacioAntes9Meses() + "'" +
             ", semanasGestacion=" + getSemanasGestacion() +
             ", pesoAlNacer=" + getPesoAlNacer() +
-            ", enfermedadAuditivaLenguaje='" + isEnfermedadAuditivaLenguaje() + "'" +
+            ", enfermedadAuditivaLenguaje='" + getEnfermedadAuditivaLenguaje() + "'" +
             ", descripcionProblemaAuditivoLenguaje='" + getDescripcionProblemaAuditivoLenguaje() + "'" +
-            ", infeccionesOido='" + isInfeccionesOido() + "'" +
+            ", infeccionesOido='" + getInfeccionesOido() + "'" +
             ", totalInfeccionesAnual=" + getTotalInfeccionesAnual() +
-            ", problemaSalud='" + isProblemaSalud() + "'" +
+            ", problemaSalud='" + getProblemaSalud() + "'" +
             ", descripcionProblemaSalud='" + getDescripcionProblemaSalud() + "'" +
             ", nombreMadre='" + getNombreMadre() + "'" +
             ", edadMadre=" + getEdadMadre() +

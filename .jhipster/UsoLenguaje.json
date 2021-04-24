@@ -8,14 +8,12 @@
   ],
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "one-to-many",
       "otherEntityName": "seccionB",
       "otherEntityRelationshipName": "usoLenguaje",
-      "relationshipName": "seccionB",
-      "otherEntityField": "id"
+      "relationshipName": "seccionB"
     }
   ],
-  "changelogDate": "20201130121946",
   "entityTableName": "uso_lenguaje",
   "dto": "no",
   "pagination": "no",
@@ -24,6 +22,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "changelogDate": "20210424221821"
 }

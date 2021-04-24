@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ISeccionC } from 'app/shared/model/seccion-c.model';
-import { getEntities as getSeccionCs } from 'app/entities/seccion-c/seccion-c.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './forma-verbal.reducer';
 import { IFormaVerbal } from 'app/shared/model/forma-verbal.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +15,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IFormaVerbalUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const FormaVerbalUpdate = (props: IFormaVerbalUpdateProps) => {
-  const [seccionCId, setSeccionCId] = useState('0');
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { formaVerbalEntity, seccionCS, loading, updating } = props;
+  const { formaVerbalEntity, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/forma-verbal');
@@ -32,8 +29,6 @@ export const FormaVerbalUpdate = (props: IFormaVerbalUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
-
-    props.getSeccionCs();
   }, []);
 
   useEffect(() => {
@@ -61,7 +56,7 @@ export const FormaVerbalUpdate = (props: IFormaVerbalUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.formaVerbal.home.createOrEditLabel">
+          <h2 id="cdiApp.formaVerbal.home.createOrEditLabel" data-cy="FormaVerbalCreateUpdateHeading">
             <Translate contentKey="cdiApp.formaVerbal.home.createOrEditLabel">Create or edit a FormaVerbal</Translate>
           </h2>
         </Col>
@@ -84,22 +79,7 @@ export const FormaVerbalUpdate = (props: IFormaVerbalUpdateProps) => {
                 <Label id="formaLabel" for="forma-verbal-forma">
                   <Translate contentKey="cdiApp.formaVerbal.forma">Forma</Translate>
                 </Label>
-                <AvField id="forma-verbal-forma" type="text" name="forma" />
-              </AvGroup>
-              <AvGroup>
-                <Label for="forma-verbal-seccionC">
-                  <Translate contentKey="cdiApp.formaVerbal.seccionC">Seccion C</Translate>
-                </Label>
-                <AvInput id="forma-verbal-seccionC" type="select" className="form-control" name="seccionC.id">
-                  <option value="" key="0" />
-                  {seccionCS
-                    ? seccionCS.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
+                <AvField id="forma-verbal-forma" data-cy="forma" type="text" name="forma" />
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/forma-verbal" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
@@ -109,7 +89,7 @@ export const FormaVerbalUpdate = (props: IFormaVerbalUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
@@ -123,7 +103,6 @@ export const FormaVerbalUpdate = (props: IFormaVerbalUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  seccionCS: storeState.seccionC.entities,
   formaVerbalEntity: storeState.formaVerbal.entity,
   loading: storeState.formaVerbal.loading,
   updating: storeState.formaVerbal.updating,
@@ -131,7 +110,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSeccionCs,
   getEntity,
   updateEntity,
   createEntity,

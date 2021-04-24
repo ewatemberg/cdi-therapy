@@ -1,7 +1,6 @@
 package frlp.utn.edu.ar.service;
 
 import frlp.utn.edu.ar.domain.FraseCompleja;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import java.util.Optional;
  * Service Interface for managing {@link FraseCompleja}.
  */
 public interface FraseComplejaService {
-
     /**
      * Save a fraseCompleja.
      *
@@ -19,12 +17,19 @@ public interface FraseComplejaService {
     FraseCompleja save(FraseCompleja fraseCompleja);
 
     /**
+     * Partially updates a fraseCompleja.
+     *
+     * @param fraseCompleja the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<FraseCompleja> partialUpdate(FraseCompleja fraseCompleja);
+
+    /**
      * Get all the fraseComplejas.
      *
      * @return the list of entities.
      */
     List<FraseCompleja> findAll();
-
 
     /**
      * Get the "id" fraseCompleja.

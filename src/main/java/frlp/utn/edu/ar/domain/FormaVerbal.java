@@ -1,10 +1,10 @@
 package frlp.utn.edu.ar.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 
 /**
  * A FormaVerbal.
@@ -22,9 +22,9 @@ public class FormaVerbal implements Serializable {
     @Column(name = "forma")
     private String forma;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "formaVerbals", allowSetters = true)
-    private SeccionC seccionC;
+    @OneToMany(mappedBy = "formaVerbal")
+    @JsonIgnoreProperties(value = { "cuestionario", "formaVerbal" }, allowSetters = true)
+    private Set<SeccionC> seccionCS = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -35,8 +35,13 @@ public class FormaVerbal implements Serializable {
         this.id = id;
     }
 
+    public FormaVerbal id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getForma() {
-        return forma;
+        return this.forma;
     }
 
     public FormaVerbal forma(String forma) {
@@ -48,18 +53,37 @@ public class FormaVerbal implements Serializable {
         this.forma = forma;
     }
 
-    public SeccionC getSeccionC() {
-        return seccionC;
+    public Set<SeccionC> getSeccionCS() {
+        return this.seccionCS;
     }
 
-    public FormaVerbal seccionC(SeccionC seccionC) {
-        this.seccionC = seccionC;
+    public FormaVerbal seccionCS(Set<SeccionC> seccionCS) {
+        this.setSeccionCS(seccionCS);
         return this;
     }
 
-    public void setSeccionC(SeccionC seccionC) {
-        this.seccionC = seccionC;
+    public FormaVerbal addSeccionC(SeccionC seccionC) {
+        this.seccionCS.add(seccionC);
+        seccionC.setFormaVerbal(this);
+        return this;
     }
+
+    public FormaVerbal removeSeccionC(SeccionC seccionC) {
+        this.seccionCS.remove(seccionC);
+        seccionC.setFormaVerbal(null);
+        return this;
+    }
+
+    public void setSeccionCS(Set<SeccionC> seccionCS) {
+        if (this.seccionCS != null) {
+            this.seccionCS.forEach(i -> i.setFormaVerbal(null));
+        }
+        if (seccionCS != null) {
+            seccionCS.forEach(i -> i.setFormaVerbal(this));
+        }
+        this.seccionCS = seccionCS;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -75,7 +99,8 @@ public class FormaVerbal implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

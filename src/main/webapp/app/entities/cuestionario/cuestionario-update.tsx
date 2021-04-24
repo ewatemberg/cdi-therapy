@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+import { Translate, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -17,8 +17,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ICuestionarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const CuestionarioUpdate = (props: ICuestionarioUpdateProps) => {
-  const [pacienteId, setPacienteId] = useState('0');
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   const { cuestionarioEntity, pacientes, loading, updating } = props;
 
@@ -47,6 +46,7 @@ export const CuestionarioUpdate = (props: ICuestionarioUpdateProps) => {
       const entity = {
         ...cuestionarioEntity,
         ...values,
+        paciente: pacientes.find(it => it.id.toString() === values.pacienteId.toString()),
       };
 
       if (isNew) {
@@ -61,7 +61,7 @@ export const CuestionarioUpdate = (props: ICuestionarioUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="cdiApp.cuestionario.home.createOrEditLabel">
+          <h2 id="cdiApp.cuestionario.home.createOrEditLabel" data-cy="CuestionarioCreateUpdateHeading">
             <Translate contentKey="cdiApp.cuestionario.home.createOrEditLabel">Create or edit a Cuestionario</Translate>
           </h2>
         </Col>
@@ -84,7 +84,7 @@ export const CuestionarioUpdate = (props: ICuestionarioUpdateProps) => {
                 <Label for="cuestionario-paciente">
                   <Translate contentKey="cdiApp.cuestionario.paciente">Paciente</Translate>
                 </Label>
-                <AvInput id="cuestionario-paciente" type="select" className="form-control" name="paciente.id">
+                <AvInput id="cuestionario-paciente" data-cy="paciente" type="select" className="form-control" name="pacienteId">
                   <option value="" key="0" />
                   {pacientes
                     ? pacientes.map(otherEntity => (
@@ -103,7 +103,7 @@ export const CuestionarioUpdate = (props: ICuestionarioUpdateProps) => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>

@@ -12,20 +12,18 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "formaVerbal",
-      "otherEntityRelationshipName": "seccionC",
-      "relationshipName": "formaVerbal"
-    },
-    {
       "relationshipType": "many-to-one",
       "otherEntityName": "cuestionario",
       "otherEntityRelationshipName": "seccionC",
-      "relationshipName": "cuestionario",
-      "otherEntityField": "id"
+      "relationshipName": "cuestionario"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "formaVerbal",
+      "otherEntityRelationshipName": "seccionC",
+      "relationshipName": "formaVerbal"
     }
   ],
-  "changelogDate": "20201130121646",
   "entityTableName": "seccion_c",
   "dto": "no",
   "pagination": "pagination",
@@ -34,6 +32,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "changelogDate": "20210424221818"
 }

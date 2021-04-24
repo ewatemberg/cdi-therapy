@@ -1,12 +1,14 @@
 package frlp.utn.edu.ar.web.rest;
 
 import frlp.utn.edu.ar.domain.SeccionB;
+import frlp.utn.edu.ar.repository.SeccionBRepository;
 import frlp.utn.edu.ar.service.SeccionBService;
 import frlp.utn.edu.ar.web.rest.errors.BadRequestAlertException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,14 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link frlp.utn.edu.ar.domain.SeccionB}.
@@ -39,8 +39,11 @@ public class SeccionBResource {
 
     private final SeccionBService seccionBService;
 
-    public SeccionBResource(SeccionBService seccionBService) {
+    private final SeccionBRepository seccionBRepository;
+
+    public SeccionBResource(SeccionBService seccionBService, SeccionBRepository seccionBRepository) {
         this.seccionBService = seccionBService;
+        this.seccionBRepository = seccionBRepository;
     }
 
     /**
@@ -57,30 +60,80 @@ public class SeccionBResource {
             throw new BadRequestAlertException("A new seccionB cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SeccionB result = seccionBService.save(seccionB);
-        return ResponseEntity.created(new URI("/api/seccion-bs/" + result.getId()))
+        return ResponseEntity
+            .created(new URI("/api/seccion-bs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /seccion-bs} : Updates an existing seccionB.
+     * {@code PUT  /seccion-bs/:id} : Updates an existing seccionB.
      *
+     * @param id the id of the seccionB to save.
      * @param seccionB the seccionB to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated seccionB,
      * or with status {@code 400 (Bad Request)} if the seccionB is not valid,
      * or with status {@code 500 (Internal Server Error)} if the seccionB couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/seccion-bs")
-    public ResponseEntity<SeccionB> updateSeccionB(@RequestBody SeccionB seccionB) throws URISyntaxException {
-        log.debug("REST request to update SeccionB : {}", seccionB);
+    @PutMapping("/seccion-bs/{id}")
+    public ResponseEntity<SeccionB> updateSeccionB(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody SeccionB seccionB
+    ) throws URISyntaxException {
+        log.debug("REST request to update SeccionB : {}, {}", id, seccionB);
         if (seccionB.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!Objects.equals(id, seccionB.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!seccionBRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         SeccionB result = seccionBService.save(seccionB);
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, seccionB.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code PATCH  /seccion-bs/:id} : Partial updates given fields of an existing seccionB, field will ignore if it is null
+     *
+     * @param id the id of the seccionB to save.
+     * @param seccionB the seccionB to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated seccionB,
+     * or with status {@code 400 (Bad Request)} if the seccionB is not valid,
+     * or with status {@code 404 (Not Found)} if the seccionB is not found,
+     * or with status {@code 500 (Internal Server Error)} if the seccionB couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/seccion-bs/{id}", consumes = "application/merge-patch+json")
+    public ResponseEntity<SeccionB> partialUpdateSeccionB(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody SeccionB seccionB
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update SeccionB partially : {}, {}", id, seccionB);
+        if (seccionB.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, seccionB.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!seccionBRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<SeccionB> result = seccionBService.partialUpdate(seccionB);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, seccionB.getId().toString())
+        );
     }
 
     /**
@@ -120,6 +173,9 @@ public class SeccionBResource {
     public ResponseEntity<Void> deleteSeccionB(@PathVariable Long id) {
         log.debug("REST request to delete SeccionB : {}", id);
         seccionBService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

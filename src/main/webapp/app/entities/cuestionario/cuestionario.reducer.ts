@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
   FETCH_CUESTIONARIO: 'cuestionario/FETCH_CUESTIONARIO',
   CREATE_CUESTIONARIO: 'cuestionario/CREATE_CUESTIONARIO',
   UPDATE_CUESTIONARIO: 'cuestionario/UPDATE_CUESTIONARIO',
+  PARTIAL_UPDATE_CUESTIONARIO: 'cuestionario/PARTIAL_UPDATE_CUESTIONARIO',
   DELETE_CUESTIONARIO: 'cuestionario/DELETE_CUESTIONARIO',
   RESET: 'cuestionario/RESET',
 };
@@ -42,6 +43,7 @@ export default (state: CuestionarioState = initialState, action): CuestionarioSt
     case REQUEST(ACTION_TYPES.CREATE_CUESTIONARIO):
     case REQUEST(ACTION_TYPES.UPDATE_CUESTIONARIO):
     case REQUEST(ACTION_TYPES.DELETE_CUESTIONARIO):
+    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_CUESTIONARIO):
       return {
         ...state,
         errorMessage: null,
@@ -52,6 +54,7 @@ export default (state: CuestionarioState = initialState, action): CuestionarioSt
     case FAILURE(ACTION_TYPES.FETCH_CUESTIONARIO):
     case FAILURE(ACTION_TYPES.CREATE_CUESTIONARIO):
     case FAILURE(ACTION_TYPES.UPDATE_CUESTIONARIO):
+    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_CUESTIONARIO):
     case FAILURE(ACTION_TYPES.DELETE_CUESTIONARIO):
       return {
         ...state,
@@ -75,6 +78,7 @@ export default (state: CuestionarioState = initialState, action): CuestionarioSt
       };
     case SUCCESS(ACTION_TYPES.CREATE_CUESTIONARIO):
     case SUCCESS(ACTION_TYPES.UPDATE_CUESTIONARIO):
+    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_CUESTIONARIO):
       return {
         ...state,
         updating: false,
@@ -129,7 +133,15 @@ export const createEntity: ICrudPutAction<ICuestionario> = entity => async dispa
 export const updateEntity: ICrudPutAction<ICuestionario> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CUESTIONARIO,
-    payload: axios.put(apiUrl, cleanEntity(entity)),
+    payload: axios.put(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
+  });
+  return result;
+};
+
+export const partialUpdate: ICrudPutAction<ICuestionario> = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.PARTIAL_UPDATE_CUESTIONARIO,
+    payload: axios.patch(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
   });
   return result;
 };

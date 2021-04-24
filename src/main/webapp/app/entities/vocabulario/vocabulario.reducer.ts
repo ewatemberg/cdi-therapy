@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
   FETCH_VOCABULARIO: 'vocabulario/FETCH_VOCABULARIO',
   CREATE_VOCABULARIO: 'vocabulario/CREATE_VOCABULARIO',
   UPDATE_VOCABULARIO: 'vocabulario/UPDATE_VOCABULARIO',
+  PARTIAL_UPDATE_VOCABULARIO: 'vocabulario/PARTIAL_UPDATE_VOCABULARIO',
   DELETE_VOCABULARIO: 'vocabulario/DELETE_VOCABULARIO',
   RESET: 'vocabulario/RESET',
 };
@@ -41,6 +42,7 @@ export default (state: VocabularioState = initialState, action): VocabularioStat
     case REQUEST(ACTION_TYPES.CREATE_VOCABULARIO):
     case REQUEST(ACTION_TYPES.UPDATE_VOCABULARIO):
     case REQUEST(ACTION_TYPES.DELETE_VOCABULARIO):
+    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_VOCABULARIO):
       return {
         ...state,
         errorMessage: null,
@@ -51,6 +53,7 @@ export default (state: VocabularioState = initialState, action): VocabularioStat
     case FAILURE(ACTION_TYPES.FETCH_VOCABULARIO):
     case FAILURE(ACTION_TYPES.CREATE_VOCABULARIO):
     case FAILURE(ACTION_TYPES.UPDATE_VOCABULARIO):
+    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_VOCABULARIO):
     case FAILURE(ACTION_TYPES.DELETE_VOCABULARIO):
       return {
         ...state,
@@ -73,6 +76,7 @@ export default (state: VocabularioState = initialState, action): VocabularioStat
       };
     case SUCCESS(ACTION_TYPES.CREATE_VOCABULARIO):
     case SUCCESS(ACTION_TYPES.UPDATE_VOCABULARIO):
+    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_VOCABULARIO):
       return {
         ...state,
         updating: false,
@@ -124,7 +128,15 @@ export const createEntity: ICrudPutAction<IVocabulario> = entity => async dispat
 export const updateEntity: ICrudPutAction<IVocabulario> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_VOCABULARIO,
-    payload: axios.put(apiUrl, cleanEntity(entity)),
+    payload: axios.put(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
+  });
+  return result;
+};
+
+export const partialUpdate: ICrudPutAction<IVocabulario> = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.PARTIAL_UPDATE_VOCABULARIO,
+    payload: axios.patch(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
   });
   return result;
 };

@@ -3,6 +3,7 @@
     "seccionB": {
       "home": {
         "title": "Seccion BS",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Seccion B",
         "createOrEditLabel": "Crear o editar Seccion B",
         "notFound": "Ningún Seccion BS encontrado"
@@ -16,9 +17,10 @@
       "detail": {
         "title": "Seccion B"
       },
+      "id": "ID",
       "valor": "Valor",
-      "usoLenguaje": "Uso Lenguaje",
-      "cuestionario": "Cuestionario"
+      "cuestionario": "Cuestionario",
+      "usoLenguaje": "Uso Lenguaje"
     }
   }
 }
