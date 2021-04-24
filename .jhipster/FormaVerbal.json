@@ -1,0 +1,27 @@
+{
+  "name": "FormaVerbal",
+  "fields": [
+    {
+      "fieldName": "forma",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "seccionC",
+      "otherEntityRelationshipName": "formaVerbal",
+      "relationshipName": "seccionC"
+    }
+  ],
+  "entityTableName": "forma_verbal",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210424221822"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Vocabulario",
+  "fields": [
+    {
+      "fieldName": "palabra",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "categoria",
+      "fieldType": "CategoriaSemantica",
+      "fieldValues": "SONIDOS,ANIMAL,VEHICULOS,ALIMENTACION,ROPA,CUERPO,JUGUETES,COCINA,MUEBLE_CUARTO,LUGAR_OBJETO,PERSONAS,RUTINAS_JUEGOS,ACCIONES_PROCESOS,TIEMPO,CUALIDADES_ATRIBUTOS,PRONOMBRES,PREGUNTAS,PREPOSICIONES_ARTICULOS,CUALIFICADORES_ADVERBIOS,LOCATIVOS"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "seccionA",
+      "otherEntityRelationshipName": "vocabulario",
+      "relationshipName": "seccionA"
+    }
+  ],
+  "entityTableName": "vocabulario",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210424221820"
+}

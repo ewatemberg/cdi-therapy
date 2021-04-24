@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity SeccionC.
+    -->
+    <changeSet id="20210424221818-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="cuestionario_id"
+                                 baseTableName="seccion_c"
+                                 constraintName="fk_seccion_c__cuestionario_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cuestionario"/>
+
+        <addForeignKeyConstraint baseColumnNames="forma_verbal_id"
+                                 baseTableName="seccion_c"
+                                 constraintName="fk_seccion_c__forma_verbal_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="forma_verbal"/>
+    </changeSet>
+</databaseChangeLog>

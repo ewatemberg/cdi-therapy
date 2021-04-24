@@ -41,6 +41,19 @@
     "packageFolder": "frlp/utn/edu/ar",
     "jwtSecretKey": "MzdiYTQzNjdlZDE2YzMyZDJlYTFiMDk0ZTk4MzI3MTJhOGYzOWZkZjk1ZWE0ODU1NjcwNTg2ZTM1OTQ0MWE2YWZjMGFiMDY5NjQ1ZGUyNTI0YmQyOTNkZDczYTg5MTg3YTIxMjc2NTBiM2MxODhiYjRmMDFiMWM5MGFkZGVmNjQ=",
     "clientPackageManager": "npm",
-    "languages": ["es"]
+    "languages": ["es"],
+    "entities": [
+      "Paciente",
+      "SeccionA",
+      "SeccionB",
+      "SeccionC",
+      "SeccionD",
+      "Vocabulario",
+      "UsoLenguaje",
+      "FormaVerbal",
+      "FraseCompleja",
+      "Cuestionario"
+    ],
+    "lastLiquibaseTimestamp": 1619302704000
   }
 }

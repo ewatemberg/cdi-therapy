@@ -1,0 +1,27 @@
+{
+  "cdiApp": {
+    "seccionC": {
+      "home": {
+        "title": "Seccion CS",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Seccion C",
+        "createOrEditLabel": "Crear o editar Seccion C",
+        "notFound": "Ningún Seccion CS encontrado"
+      },
+      "created": "Un nuevo Seccion C ha sido creado con el identificador {{ param }}",
+      "updated": "Un Seccion C ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Seccion C ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Seccion C {{ id }}?"
+      },
+      "detail": {
+        "title": "Seccion C"
+      },
+      "id": "ID",
+      "descripcion": "Descripcion",
+      "valor": "Valor",
+      "cuestionario": "Cuestionario",
+      "formaVerbal": "Forma Verbal"
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "name": "Paciente",
+  "fields": [
+    {
+      "fieldName": "nombres",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "apellidos",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "obraSocial",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dni",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fechaNacimiento",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "lugarNacimiento",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "genero",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nacioAntes9Meses",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "semanasGestacion",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "pesoAlNacer",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "enfermedadAuditivaLenguaje",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "descripcionProblemaAuditivoLenguaje",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "infeccionesOido",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "totalInfeccionesAnual",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "problemaSalud",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "descripcionProblemaSalud",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nombreMadre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "edadMadre",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "lugarOrigenMadre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nombrePadre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "edadPadre",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "lugarOrigenPadre",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "cuestionario",
+      "otherEntityRelationshipName": "paciente",
+      "relationshipName": "cuestionario"
+    }
+  ],
+  "entityTableName": "paciente",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210424221815"
+}

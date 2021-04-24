@@ -1,0 +1,26 @@
+{
+  "cdiApp": {
+    "vocabulario": {
+      "home": {
+        "title": "Vocabularios",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Vocabulario",
+        "createOrEditLabel": "Crear o editar Vocabulario",
+        "notFound": "Ningún Vocabularios encontrado"
+      },
+      "created": "Un nuevo Vocabulario ha sido creado con el identificador {{ param }}",
+      "updated": "Un Vocabulario ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Vocabulario ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Vocabulario {{ id }}?"
+      },
+      "detail": {
+        "title": "Vocabulario"
+      },
+      "id": "ID",
+      "palabra": "Palabra",
+      "categoria": "Categoria",
+      "seccionA": "Seccion A"
+    }
+  }
+}

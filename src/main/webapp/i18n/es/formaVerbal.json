@@ -1,0 +1,25 @@
+{
+  "cdiApp": {
+    "formaVerbal": {
+      "home": {
+        "title": "Forma Verbals",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Forma Verbal",
+        "createOrEditLabel": "Crear o editar Forma Verbal",
+        "notFound": "Ningún Forma Verbals encontrado"
+      },
+      "created": "Un nuevo Forma Verbal ha sido creado con el identificador {{ param }}",
+      "updated": "Un Forma Verbal ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Forma Verbal ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Forma Verbal {{ id }}?"
+      },
+      "detail": {
+        "title": "Forma Verbal"
+      },
+      "id": "ID",
+      "forma": "Forma",
+      "seccionC": "Seccion C"
+    }
+  }
+}

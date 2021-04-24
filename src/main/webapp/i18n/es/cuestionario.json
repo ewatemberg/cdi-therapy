@@ -1,0 +1,28 @@
+{
+  "cdiApp": {
+    "cuestionario": {
+      "home": {
+        "title": "Cuestionarios",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Cuestionario",
+        "createOrEditLabel": "Crear o editar Cuestionario",
+        "notFound": "Ningún Cuestionarios encontrado"
+      },
+      "created": "Un nuevo Cuestionario ha sido creado con el identificador {{ param }}",
+      "updated": "Un Cuestionario ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Cuestionario ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Cuestionario {{ id }}?"
+      },
+      "detail": {
+        "title": "Cuestionario"
+      },
+      "id": "ID",
+      "seccionA": "Seccion A",
+      "seccionB": "Seccion B",
+      "seccionC": "Seccion C",
+      "seccionD": "Seccion D",
+      "paciente": "Paciente"
+    }
+  }
+}
