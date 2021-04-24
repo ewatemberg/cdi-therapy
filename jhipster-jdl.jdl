@@ -89,10 +89,10 @@ relationship OneToMany {
 	Cuestionario to SeccionB{cuestionario},
 	Cuestionario to SeccionC{cuestionario},
 	Cuestionario to SeccionD{cuestionario},
-	SeccionA to Vocabulario{seccionA},
-	SeccionB to UsoLenguaje{seccionB},
-	SeccionC to FormaVerbal{seccionC},
-	SeccionD to FraseCompleja{SeccionD},
+    Vocabulario to SeccionA{vocabulario},
+    UsoLenguaje to SeccionB{usoLenguaje},
+    FormaVerbal to SeccionC{formaVerbal},
+    FraseCompleja to SeccionD{fraseCompleja},
 	Paciente to Cuestionario{paciente}
 }
 

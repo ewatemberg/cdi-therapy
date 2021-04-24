@@ -13,6 +13,8 @@
     "indicator": {
       "diskSpace": "Espacio en disco",
       "mail": "Email",
+      "livenessState": "Liveness state",
+      "readinessState": "Readiness state",
       "ping": "Application",
       "db": "Database"
     },
@@ -21,7 +23,7 @@
       "status": "Estado"
     },
     "status": {
-      "UNKNOWN": "UNKNOWN",
+      "UNKNOWN": "DESCONOCIDO",
       "UP": "LEVANTADO",
       "DOWN": "CAÍDO"
     }
