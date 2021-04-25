@@ -1,13 +1,15 @@
 import './header.scss';
 
-import React, { useState } from 'react';
-import { Translate, Storage } from 'react-jhipster';
-import { Navbar, Nav, NavbarToggler, Collapse } from 'reactstrap';
+import React, {useState} from 'react';
+import {Translate, Storage} from 'react-jhipster';
+import {Navbar, Nav, NavbarToggler, Collapse} from 'reactstrap';
 
 import LoadingBar from 'react-redux-loading-bar';
 
-import { Home, Brand } from './header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu, LocaleMenu } from '../menus';
+import {Home, Brand} from './header-components';
+import {AdminMenu, EntitiesMenu, AccountMenu, LocaleMenu} from '../menus';
+import {connect} from "react-redux";
+import {CuestionarioDetail} from "app/entities/cuestionario/cuestionario-detail";
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -17,6 +19,7 @@ export interface IHeaderProps {
   isOpenAPIEnabled: boolean;
   currentLocale: string;
   onLocaleChange: (langKey: string) => void;
+  shouldHidden: boolean;
 }
 
 const Header = (props: IHeaderProps) => {
@@ -32,7 +35,7 @@ const Header = (props: IHeaderProps) => {
     props.isInProduction === false ? (
       <div className="ribbon dev">
         <a href="">
-          <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
+          <Translate contentKey={`global.ribbon.${props.ribbonEnv}`}/>
         </a>
       </div>
     ) : null;
@@ -42,22 +45,25 @@ const Header = (props: IHeaderProps) => {
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
   return (
-    <div id="app-header">
-      {renderDevRibbon()}
-      <LoadingBar className="loading-bar" />
-      <Navbar data-cy="navbar" dark expand="sm" fixed="top" className="bg-primary">
-        <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
-        <Brand />
-        <Collapse isOpen={menuOpen} navbar>
-          <Nav id="header-tabs" className="ml-auto" navbar>
-            <Home />
-            {props.isAuthenticated && <EntitiesMenu />}
-            {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled} />}
-            <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
-            <AccountMenu isAuthenticated={props.isAuthenticated} />
-          </Nav>
-        </Collapse>
-      </Navbar>
+    <div>
+      {!props.shouldHidden ?
+        <div id="app-header">
+          {/*{renderDevRibbon()}*/}
+          <LoadingBar className="loading-bar"/>
+          <Navbar data-cy="navbar" dark expand="sm" fixed="top" className="bg-primary">
+            <NavbarToggler aria-label="Menu" onClick={toggleMenu}/>
+            <Brand/>
+            <Collapse isOpen={menuOpen} navbar>
+              <Nav id="header-tabs" className="ml-auto" navbar>
+                <Home/>
+                {props.isAuthenticated && <EntitiesMenu/>}
+                {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled}/>}
+                <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange}/>
+                <AccountMenu isAuthenticated={props.isAuthenticated}/>
+              </Nav>
+            </Collapse>
+          </Navbar>
+        </div> : null}
     </div>
   );
 };

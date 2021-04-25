@@ -9,7 +9,7 @@ const Footer = props => (
     <Row>
       <Col md="12">
         <p>
-          <Translate contentKey="footer">Your footer</Translate>
+          Copyright © 2021 <a href="https://codapli.frlp.utn.edu.ar/">Codapli</a> All Rights Reserved.
         </p>
       </Col>
     </Row>

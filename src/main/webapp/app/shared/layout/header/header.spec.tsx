@@ -22,6 +22,7 @@ describe('Header', () => {
     ribbonEnv: 'dev',
     isInProduction: false,
     isOpenAPIEnabled: true,
+    shouldHidden: false,
   };
   const prodProps = {
     ...devProps,
@@ -32,11 +33,13 @@ describe('Header', () => {
   const userProps = {
     ...prodProps,
     isAdmin: false,
+    shouldHidden: false,
   };
   const guestProps = {
     ...prodProps,
     isAdmin: false,
     isAuthenticated: false,
+    shouldHidden: false,
   };
 
   const wrapper = (props = devProps) => {

@@ -1,3 +1,5 @@
+import './cuestionario.scss';
+
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Link, RouteComponentProps} from 'react-router-dom';
